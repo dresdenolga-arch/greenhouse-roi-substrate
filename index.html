@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ROI-калькулятор субстрата для тепличных комбинатов</title>
+    <style>:root {
+  --bg: #f4f5f1;
+  --panel: #ffffff;
+  --ink: #18211f;
+  --muted: #66726d;
+  --line: #d9ded8;
+  --green: #1f8a5b;
+  --green-dark: #12613f;
+  --red: #ba3f3a;
+  --amber: #c9821f;
+  --blue: #2f6f92;
+  --soft-green: #e8f4ed;
+  --soft-red: #f8e8e6;
+  --soft-blue: #e7f0f5;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(244, 245, 241, 0.94);
+  backdrop-filter: blur(10px);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.eyebrow {
+  margin-bottom: 4px;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.topbar__summary {
+  display: grid;
+  min-width: 240px;
+  justify-items: end;
+  gap: 2px;
+}
+
+.topbar__summary strong {
+  font-size: 22px;
+}
+
+.topbar__summary small {
+  color: var(--muted);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--soft-blue);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge.good {
+  background: var(--soft-green);
+  color: var(--green-dark);
+}
+
+.badge.bad {
+  background: var(--soft-red);
+  color: var(--red);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+}
+
+.sidebar {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.workspace {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 16px;
+  box-shadow: 0 1px 1px rgba(17, 28, 24, 0.03);
+}
+
+.panel h2 {
+  margin-bottom: 12px;
+}
+
+.sidebar .panel {
+  padding: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  color: #33403b;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #c7d0ca;
+  border-radius: 6px;
+  background: #fbfcfa;
+  color: var(--ink);
+  padding: 8px 10px;
+}
+
+input[type="range"] {
+  padding: 0;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--green);
+  outline: 2px solid rgba(31, 138, 91, 0.14);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f7f8f5;
+}
+
+.segment,
+.ghostButton {
+  min-height: 36px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.segment.active {
+  border-color: #b8d9c8;
+  background: var(--soft-green);
+  color: var(--green-dark);
+}
+
+.ghostButton {
+  border-color: var(--line);
+  background: #fbfcfa;
+  color: var(--ink);
+  padding: 0 14px;
+}
+
+.hint {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.metric {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #f7f8f5;
+  color: var(--muted);
+}
+
+.metric strong {
+  color: var(--ink);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
+  gap: 22px;
+  align-items: center;
+  min-height: 174px;
+  background: linear-gradient(135deg, #ffffff 0%, #eef6ef 100%);
+}
+
+.hero h2 {
+  margin-bottom: 8px;
+  font-size: 30px;
+}
+
+.hero p:not(.eyebrow) {
+  max-width: 720px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.kpis div {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid #d5e4d9;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.kpis span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.kpis strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.sectionHead p {
+  max-width: 900px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.tableWrap {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  padding: 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+th {
+  background: #f7f8f5;
+  color: #3d4844;
+  font-size: 12px;
+}
+
+td input {
+  min-width: 86px;
+  min-height: 32px;
+  padding: 5px 7px;
+  text-align: right;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.chart {
+  min-height: 280px;
+  overflow: hidden;
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 128px;
+  gap: 10px;
+  align-items: center;
+  min-height: 42px;
+  margin: 8px 0;
+}
+
+.barLabel {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.barTrack {
+  height: 22px;
+  border-radius: 5px;
+  background: #eef1ec;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  min-width: 2px;
+  border-radius: 5px;
+}
+
+.barFill.good {
+  background: var(--green);
+}
+
+.barFill.bad {
+  background: var(--red);
+}
+
+.barValue {
+  color: #31403a;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.lineChart {
+  position: relative;
+  min-height: 280px;
+}
+
+.lineChart svg {
+  width: 100%;
+  height: 280px;
+  display: block;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 999px;
+  background: var(--green);
+}
+
+.legend span:nth-child(2)::before {
+  background: var(--blue);
+}
+
+.heatmap {
+  overflow: auto;
+}
+
+.heatCell {
+  min-width: 96px;
+  border-radius: 5px;
+  color: #10201a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.summaryTable table {
+  table-layout: fixed;
+}
+
+.summaryTable td:last-child,
+.summaryTable th:last-child {
+  text-align: right;
+}
+
+@media (max-width: 1120px) {
+  .layout,
+  .hero,
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: 2;
+  }
+
+  .grid4 {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    position: static;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .topbar__summary {
+    justify-items: start;
+  }
+
+  .layout {
+    padding: 10px;
+  }
+
+  .grid2,
+  .grid4,
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHead {
+    display: grid;
+  }
+
+  .barRow {
+    grid-template-columns: 1fr;
+  }
+
+  th,
+  td {
+    padding: 7px;
+  }
+}
+</style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">МПС субстрата</p>
+        <h1>ROI-калькулятор для тепличных комбинатов</h1>
+      </div>
+      <div class="topbar__summary">
+        <span id="resultBadge" class="badge">Расчет</span>
+        <strong id="topProfit">0 руб.</strong>
+        <small>доп. прибыль А против Б</small>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Культура и режим</h2>
+          <div class="segmented" role="group" aria-label="Культура">
+            <button class="segment active" data-crop="cucumber">Огурец</button>
+            <button class="segment" data-crop="tomato">Томат</button>
+          </div>
+          <label>
+            Метод выручки
+            <select id="revenueMode">
+              <option value="weekly">По неделям</option>
+              <option value="monthly">По месяцам</option>
+              <option value="simple">Средняя за оборот</option>
+            </select>
+          </label>
+          <label>
+            Площадь отделения, м2
+            <input id="area" type="number" min="1" step="100" value="10000" />
+          </label>
+          <label>
+            Длительность оборота, дней
+            <input id="cycleDays" type="number" min="1" step="1" value="92" />
+          </label>
+          <label>
+            Дата начала оборота
+            <input id="cycleStart" type="date" value="2026-01-05" />
+          </label>
+          <div class="grid2">
+            <label>
+              Старт сбора А
+              <input id="harvestStartA" type="date" value="2026-02-02" />
+            </label>
+            <label>
+              Старт сбора Б
+              <input id="harvestStartB" type="date" value="2026-02-09" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Энергия</h2>
+          <label>
+            Источник
+            <select id="energyMode">
+              <option value="gpu">ГПУ</option>
+              <option value="grid">Сети</option>
+              <option value="mix">Микс ГПУ / сети</option>
+            </select>
+          </label>
+          <div class="grid2">
+            <label>
+              ГПУ, руб./кВтч
+              <input id="gpuPrice" type="number" step="0.1" value="3.2" />
+            </label>
+            <label>
+              Сети, руб./кВтч
+              <input id="gridPrice" type="number" step="0.1" value="9" />
+            </label>
+          </div>
+          <label id="gpuShareWrap">
+            Доля ГПУ в миксе, %
+            <input id="gpuShare" type="range" min="0" max="100" value="70" />
+            <span id="gpuShareLabel">70%</span>
+          </label>
+          <label>
+            Расход, кВтч/м2/сут
+            <input id="electricityUse" type="number" step="0.01" value="2.33" />
+          </label>
+          <p class="hint">Цена микса считается средневзвешенно. Для MVP расходы энергии одинаковы для А и Б.</p>
+        </section>
+
+        <section class="panel">
+          <h2>Субстрат и дренаж</h2>
+          <div class="grid2">
+            <label>
+              Цена мата А, руб.
+              <input id="matPriceA" type="number" step="1" value="130" />
+            </label>
+            <label>
+              Цена мата Б, руб.
+              <input id="matPriceB" type="number" step="1" value="78" />
+            </label>
+          </div>
+          <label>
+            Матов на га, шт.
+            <input id="matsPerHa" type="number" step="100" value="6000" />
+          </label>
+          <div class="grid2">
+            <label>
+              Страховой фонд А, %
+              <input id="wasteA" type="number" step="0.1" value="1" />
+            </label>
+            <label>
+              Страховой фонд Б, %
+              <input id="wasteB" type="number" step="0.1" value="2" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Дренаж А, %
+              <input id="drainA" type="number" step="1" value="25" />
+            </label>
+            <label>
+              Разница Б к А, п.п.
+              <input id="drainDelta" type="number" step="1" value="5" />
+            </label>
+          </div>
+          <p class="metric">Дренаж Б: <strong id="drainBLabel">30%</strong></p>
+        </section>
+
+        <section class="panel">
+          <h2>Вода и защита</h2>
+          <label>
+            Регион / радиация
+            <select id="waterPreset">
+              <option value="spb">Санкт-Петербург: 1.5 тыс. Дж</option>
+              <option value="central" selected>Средняя полоса: 2.0 тыс. Дж</option>
+              <option value="south">Юг: 2.7 тыс. Дж</option>
+              <option value="manual">Ручной ввод</option>
+            </select>
+          </label>
+          <div class="grid2">
+            <label>
+              Вода без дренажа, л/м2/сут
+              <input id="waterUse" type="number" step="0.1" value="3.0" />
+            </label>
+            <label>
+              Цена воды, руб./м3
+              <input id="waterPrice" type="number" step="0.1" value="0.75" />
+            </label>
+          </div>
+          <label>
+            Раствор удобрений, руб./м3
+            <input id="fertilizerPrice" type="number" step="1" value="302" />
+          </label>
+          <label>
+            Расчет защиты
+            <select id="protectionMode">
+              <option value="daily">Ставки руб./м2/день</option>
+              <option value="cycle">Сумма за оборот</option>
+            </select>
+          </label>
+          <div id="protectionDaily">
+            <label>Химия + дезинфекция <input id="chemDaily" type="number" step="0.001" value="0.192" /></label>
+            <label>Биопрепараты <input id="bioDaily" type="number" step="0.001" value="0.18" /></label>
+            <label>Энтомофаги <input id="entoDaily" type="number" step="0.001" value="0.18" /></label>
+          </div>
+          <div id="protectionCycle" class="hidden">
+            <label>Химия + дезинфекция за оборот <input id="chemCycle" type="number" step="1000" value="180000" /></label>
+            <label>Биопрепараты за оборот <input id="bioCycle" type="number" step="1000" value="160000" /></label>
+            <label>Энтомофаги за оборот <input id="entoCycle" type="number" step="1000" value="160000" /></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Тара и нестандарт</h2>
+          <label>
+            Справочник тары
+            <select id="packPreset"></select>
+          </label>
+          <label>
+            Вместимость тары, кг
+            <input id="packKg" type="number" step="0.1" value="7" />
+          </label>
+          <label>
+            Стоимость тары, руб./шт.
+            <input id="packPrice" type="number" step="1" value="35" />
+          </label>
+          <div class="grid2">
+            <label>
+              Нестандарт А, %
+              <input id="offgradeA" type="number" step="0.5" value="5" />
+            </label>
+            <label>
+              Нестандарт Б, %
+              <input id="offgradeB" type="number" step="0.5" value="5" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Прочие затраты</h2>
+          <div class="grid2">
+            <label>
+              Газ, м3/м2/сут
+              <input id="gasUse" type="number" step="0.01" value="0.24" />
+            </label>
+            <label>
+              Газ, руб./м3
+              <input id="gasPrice" type="number" step="0.1" value="12" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Сотрудников на га
+              <input id="staffPerHa" type="number" step="1" value="16" />
+            </label>
+            <label>
+              Час труда, руб.
+              <input id="laborHourPrice" type="number" step="10" value="300" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Растений на м2
+              <input id="plantDensity" type="number" step="0.1" value="2.9" />
+            </label>
+            <label>
+              Семена, руб./шт.
+              <input id="seedPrice" type="number" step="1" value="12" />
+            </label>
+          </div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="hero panel">
+          <div>
+            <p class="eyebrow">Коммерческий вывод</p>
+            <h2 id="decisionTitle">Субстрат А окупается</h2>
+            <p id="decisionText">Заполните параметры, чтобы увидеть результат.</p>
+          </div>
+          <div class="kpis">
+            <div>
+              <span>Доп. прибыль</span>
+              <strong id="profitDelta">0</strong>
+            </div>
+            <div>
+              <span>Точка окупаемости</span>
+              <strong id="breakEven">0 кг/м2</strong>
+            </div>
+            <div>
+              <span>Средняя цена А / Б</span>
+              <strong id="avgPrices">0 / 0</strong>
+            </div>
+            <div>
+              <span>Ранний старт</span>
+              <strong id="earlyStart">0 дней</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="sectionHead">
+            <div>
+              <h2>Урожай и цены реализации</h2>
+              <p>Выберите детализацию: средняя за оборот, месяцы или недели. Средняя цена считается по выручке, а не простым средним.</p>
+            </div>
+            <button id="fillCurve" class="ghostButton">Автозаполнить кривую</button>
+          </div>
+
+          <div id="simpleInputs" class="modeBlock hidden">
+            <div class="grid4">
+              <label>Урожай А, кг/м2 <input id="simpleYieldA" type="number" step="0.1" value="20.4" /></label>
+              <label>Урожай Б, кг/м2 <input id="simpleYieldB" type="number" step="0.1" value="20" /></label>
+              <label>Цена стандарт, руб./кг <input id="simplePrice" type="number" step="1" value="130" /></label>
+              <label>Цена нестандарт, руб./кг <input id="simpleOffPrice" type="number" step="1" value="105" /></label>
+            </div>
+          </div>
+
+          <div id="periodTableWrap" class="tableWrap"></div>
+        </section>
+
+        <section class="chartsGrid">
+          <div class="panel">
+            <h2>Мост прибыли</h2>
+            <div id="waterfall" class="chart"></div>
+          </div>
+          <div class="panel">
+            <h2>А vs Б по периодам</h2>
+            <div id="periodChart" class="chart"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="sectionHead">
+            <div>
+              <h2>Матрица прибыльности</h2>
+              <p>Дополнительная прибыль А против Б при разных ценах и прибавке урожая. Зеленая зона показывает, где переплата за субстрат окупается.</p>
+            </div>
+          </div>
+          <div id="heatmap" class="heatmap"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Финальная таблица</h2>
+          <div id="summaryTable" class="summaryTable"></div>
+        </section>
+      </section>
+    </main>
+
+    <script>const state = {
+  crop: "cucumber",
+  revenueMode: "weekly",
+  rows: [],
+};
+
+const cropDefaults = {
+  cucumber: {
+    cycleDays: 92,
+    electricityUse: 2.33,
+    matPriceA: 130,
+    matPriceB: 78,
+    simpleYieldA: 20.4,
+    simpleYieldB: 20,
+    simplePrice: 130,
+    simpleOffPrice: 105,
+    weekCount: 14,
+    startA: 4,
+    startB: 5,
+    peakYieldA: 2.2,
+    peakYieldB: 2.08,
+    pack: "cucumber-valigora",
+    offgradeA: 5,
+    offgradeB: 5,
+    staffPerHa: 16,
+    plantDensity: 2.9,
+    seedPrice: 12,
+  },
+  tomato: {
+    cycleDays: 330,
+    electricityUse: 2.07,
+    matPriceA: 170,
+    matPriceB: 95,
+    simpleYieldA: 66.3,
+    simpleYieldB: 65,
+    simplePrice: 95,
+    simpleOffPrice: 82,
+    weekCount: 48,
+    startA: 9,
+    startB: 10,
+    peakYieldA: 1.8,
+    peakYieldB: 1.75,
+    pack: "tomato-plum",
+    offgradeA: 6,
+    offgradeB: 6,
+    staffPerHa: 12,
+    plantDensity: 3.2,
+    seedPrice: 40,
+  },
+};
+
+const packPresets = {
+  "cucumber-valigora": { crop: "cucumber", label: "Огурец Валигора: 7 кг", kg: 7 },
+  "cucumber-standard": { crop: "cucumber", label: "Огурец стандарт: 6 кг", kg: 6 },
+  "tomato-plum": { crop: "tomato", label: "Томат сливка: 6 кг", kg: 6 },
+  "tomato-round": { crop: "tomato", label: "Томат круглый: 7 кг", kg: 7 },
+  manual: { crop: "all", label: "Ручной ввод", kg: 7 },
+};
+
+const waterPresets = {
+  spb: { label: "Санкт-Петербург", radiation: 1.5, waterUse: 3.0 },
+  central: { label: "Средняя полоса", radiation: 2.0, waterUse: 3.6 },
+  south: { label: "Юг", radiation: 2.7, waterUse: 4.6 },
+  manual: { label: "Ручной ввод", radiation: null, waterUse: null },
+};
+
+const months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+
+const $ = (id) => document.getElementById(id);
+const inputIds = [
+  "revenueMode",
+  "area",
+  "cycleDays",
+  "cycleStart",
+  "harvestStartA",
+  "harvestStartB",
+  "energyMode",
+  "gpuPrice",
+  "gridPrice",
+  "gpuShare",
+  "electricityUse",
+  "matPriceA",
+  "matPriceB",
+  "matsPerHa",
+  "wasteA",
+  "wasteB",
+  "drainA",
+  "drainDelta",
+  "waterPreset",
+  "waterUse",
+  "waterPrice",
+  "fertilizerPrice",
+  "protectionMode",
+  "chemDaily",
+  "bioDaily",
+  "entoDaily",
+  "chemCycle",
+  "bioCycle",
+  "entoCycle",
+  "packPreset",
+  "packKg",
+  "packPrice",
+  "offgradeA",
+  "offgradeB",
+  "gasUse",
+  "gasPrice",
+  "staffPerHa",
+  "laborHourPrice",
+  "plantDensity",
+  "seedPrice",
+  "simpleYieldA",
+  "simpleYieldB",
+  "simplePrice",
+  "simpleOffPrice",
+];
+
+function n(id) {
+  return Number($(id).value) || 0;
+}
+
+function money(value) {
+  return new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(value) + " руб.";
+}
+
+function number(value, digits = 1) {
+  return new Intl.NumberFormat("ru-RU", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value);
+}
+
+function setup() {
+  renderPackOptions();
+  document.querySelectorAll("[data-crop]").forEach((button) => {
+    button.addEventListener("click", () => setCrop(button.dataset.crop));
+  });
+  inputIds.forEach((id) => {
+    const el = $(id);
+    if (el) el.addEventListener("input", handleInput);
+    if (el) el.addEventListener("change", handleInput);
+  });
+  $("fillCurve").addEventListener("click", () => {
+    fillRows();
+    renderPeriodInputs();
+    update();
+  });
+  setCrop("cucumber");
+}
+
+function renderPackOptions() {
+  $("packPreset").innerHTML = Object.entries(packPresets)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+}
+
+function setCrop(crop) {
+  state.crop = crop;
+  document.querySelectorAll("[data-crop]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.crop === crop);
+  });
+  const d = cropDefaults[crop];
+  $("cycleDays").value = d.cycleDays;
+  $("electricityUse").value = d.electricityUse;
+  $("matPriceA").value = d.matPriceA;
+  $("matPriceB").value = d.matPriceB;
+  $("simpleYieldA").value = d.simpleYieldA;
+  $("simpleYieldB").value = d.simpleYieldB;
+  $("simplePrice").value = d.simplePrice;
+  $("simpleOffPrice").value = d.simpleOffPrice;
+  $("offgradeA").value = d.offgradeA;
+  $("offgradeB").value = d.offgradeB;
+  $("staffPerHa").value = d.staffPerHa;
+  $("plantDensity").value = d.plantDensity;
+  $("seedPrice").value = d.seedPrice;
+  $("harvestStartA").value = crop === "cucumber" ? "2026-02-02" : "2026-03-09";
+  $("harvestStartB").value = crop === "cucumber" ? "2026-02-09" : "2026-03-16";
+  $("packPreset").value = d.pack;
+  $("packKg").value = packPresets[d.pack].kg;
+  fillRows();
+  renderPeriodInputs();
+  update();
+}
+
+function handleInput(event) {
+  if (event && event.target.id === "waterPreset") {
+    const preset = waterPresets[$("waterPreset").value];
+    if (preset.waterUse) $("waterUse").value = preset.waterUse;
+  }
+  if (event && event.target.id === "packPreset") {
+    $("packKg").value = packPresets[$("packPreset").value].kg;
+  }
+  if (event && event.target.id === "revenueMode") {
+    state.revenueMode = $("revenueMode").value;
+    fillRows();
+    renderPeriodInputs();
+  }
+  if (event && ["cycleStart", "harvestStartA", "harvestStartB"].includes(event.target.id)) {
+    fillRows();
+    renderPeriodInputs();
+  }
+  updateRowStateFromDom();
+  renderPeriodInputs();
+  update();
+}
+
+function fillRows() {
+  state.revenueMode = $("revenueMode").value;
+  if (state.revenueMode === "monthly") {
+    const startDate = parseDate($("cycleStart").value);
+    state.rows = months.map((name, index) => {
+      const winter = index < 3 || index > 9;
+      const shoulder = index === 3 || index === 8 || index === 9;
+      const price = winter ? (state.crop === "cucumber" ? 170 : 130) : shoulder ? 110 : 70;
+      const baseYield = state.crop === "cucumber" ? [0, 0, 2, 5, 6, 4, 2, 0, 0, 0, 0, 0] : [0, 0, 0, 3, 7, 8, 8, 8, 7, 7, 6, 5];
+      return {
+        label: startDate ? monthLabel(addDays(startDate, index * 30)) : name,
+        yieldA: baseYield[index] * 1.02,
+        yieldB: baseYield[index],
+        price,
+        offPrice: price * 0.85,
+      };
+    });
+    return;
+  }
+
+  const d = cropDefaults[state.crop];
+  const cycleStart = parseDate($("cycleStart").value);
+  const startA = parseDate($("harvestStartA").value);
+  const startB = parseDate($("harvestStartB").value);
+  const startWeekA = cycleStart && startA ? Math.max(1, Math.ceil((startA - cycleStart) / 604800000) + 1) : d.startA;
+  const startWeekB = cycleStart && startB ? Math.max(1, Math.ceil((startB - cycleStart) / 604800000) + 1) : d.startB;
+  state.rows = Array.from({ length: d.weekCount }, (_, index) => {
+    const week = index + 1;
+    const price = seasonalWeekPrice(week, d.weekCount);
+    const date = cycleStart ? formatShortDate(addDays(cycleStart, index * 7)) : "";
+    return {
+      label: date ? `Нед. ${week} (${date})` : `Нед. ${week}`,
+      yieldA: weeklyCurve(week, startWeekA, d.peakYieldA, d.weekCount),
+      yieldB: weeklyCurve(week, startWeekB, d.peakYieldB, d.weekCount),
+      price,
+      offPrice: price * 0.85,
+    };
+  });
+}
+
+function seasonalWeekPrice(week, weekCount) {
+  if (state.crop === "cucumber") {
+    if (week <= 4) return 190;
+    if (week <= 8) return 150;
+    if (week <= 11) return 110;
+    return 80;
+  }
+  const progress = week / weekCount;
+  if (progress < 0.22) return 135;
+  if (progress < 0.45) return 110;
+  if (progress < 0.72) return 85;
+  return 115;
+}
+
+function weeklyCurve(week, start, peak, totalWeeks) {
+  if (week < start) return 0;
+  const age = week - start + 1;
+  const ramp = Math.min(1, age / 4);
+  const finish = Math.max(0.55, 1 - Math.max(0, week - totalWeeks * 0.72) / (totalWeeks * 0.45));
+  return round(peak * ramp * finish, 2);
+}
+
+function renderPeriodInputs() {
+  const mode = $("revenueMode").value;
+  $("simpleInputs").classList.toggle("hidden", mode !== "simple");
+  if (mode === "simple") {
+    $("periodTableWrap").innerHTML = "";
+    return;
+  }
+  $("periodTableWrap").innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>${mode === "monthly" ? "Месяц" : "Неделя"}</th>
+          <th>Урожай А, кг/м2</th>
+          <th>Урожай Б, кг/м2</th>
+          <th>Цена стандарт, руб./кг</th>
+          <th>Цена нестандарт, руб./кг</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${state.rows
+          .map(
+            (row, index) => `
+          <tr>
+            <td>${row.label}</td>
+            <td><input data-row="${index}" data-field="yieldA" type="number" step="0.01" value="${round(row.yieldA, 2)}" /></td>
+            <td><input data-row="${index}" data-field="yieldB" type="number" step="0.01" value="${round(row.yieldB, 2)}" /></td>
+            <td><input data-row="${index}" data-field="price" type="number" step="1" value="${round(row.price, 0)}" /></td>
+            <td><input data-row="${index}" data-field="offPrice" type="number" step="1" value="${round(row.offPrice, 0)}" /></td>
+          </tr>`,
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
+  $("periodTableWrap").querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", () => {
+      updateRowStateFromDom();
+      update();
+    });
+  });
+}
+
+function updateRowStateFromDom() {
+  const wrap = $("periodTableWrap");
+  if (!wrap || $("revenueMode").value === "simple") return;
+  wrap.querySelectorAll("input[data-row]").forEach((input) => {
+    const row = state.rows[Number(input.dataset.row)];
+    if (row) row[input.dataset.field] = Number(input.value) || 0;
+  });
+}
+
+function collectRevenue() {
+  const area = n("area");
+  const offA = n("offgradeA") / 100;
+  const offB = n("offgradeB") / 100;
+
+  if ($("revenueMode").value === "simple") {
+    const yieldA = n("simpleYieldA");
+    const yieldB = n("simpleYieldB");
+    const price = n("simplePrice");
+    const offPrice = n("simpleOffPrice");
+    return summarizeRevenue(
+      [{ label: "Оборот", yieldA, yieldB, price, offPrice }],
+      area,
+      offA,
+      offB,
+    );
+  }
+
+  return summarizeRevenue(state.rows, area, offA, offB);
+}
+
+function summarizeRevenue(rows, area, offA, offB) {
+  let revenueA = 0;
+  let revenueB = 0;
+  let yieldA = 0;
+  let yieldB = 0;
+  let standardWeightA = 0;
+  let standardWeightB = 0;
+  let offgradeWeightA = 0;
+  let offgradeWeightB = 0;
+  let standardRevenueA = 0;
+  let standardRevenueB = 0;
+  let offgradeRevenueA = 0;
+  let offgradeRevenueB = 0;
+  const periods = rows.map((row) => {
+    const stdA = row.yieldA * area * (1 - offA);
+    const stdB = row.yieldB * area * (1 - offB);
+    const offKgA = row.yieldA * area * offA;
+    const offKgB = row.yieldB * area * offB;
+    const revA = stdA * row.price + offKgA * row.offPrice;
+    const revB = stdB * row.price + offKgB * row.offPrice;
+    revenueA += revA;
+    revenueB += revB;
+    yieldA += row.yieldA;
+    yieldB += row.yieldB;
+    standardWeightA += stdA;
+    standardWeightB += stdB;
+    offgradeWeightA += offKgA;
+    offgradeWeightB += offKgB;
+    standardRevenueA += stdA * row.price;
+    standardRevenueB += stdB * row.price;
+    offgradeRevenueA += offKgA * row.offPrice;
+    offgradeRevenueB += offKgB * row.offPrice;
+    return { ...row, revenueA: revA, revenueB: revB };
+  });
+  return {
+    periods,
+    revenueA,
+    revenueB,
+    yieldA,
+    yieldB,
+    avgPriceA: yieldA ? revenueA / (yieldA * area) : 0,
+    avgPriceB: yieldB ? revenueB / (yieldB * area) : 0,
+    avgStandardPriceA: standardWeightA ? standardRevenueA / standardWeightA : 0,
+    avgStandardPriceB: standardWeightB ? standardRevenueB / standardWeightB : 0,
+    avgOffgradePriceA: offgradeWeightA ? offgradeRevenueA / offgradeWeightA : 0,
+    avgOffgradePriceB: offgradeWeightB ? offgradeRevenueB / offgradeWeightB : 0,
+  };
+}
+
+function calculate() {
+  const area = n("area");
+  const days = n("cycleDays");
+  const drainA = n("drainA") / 100;
+  const drainB = (n("drainA") + n("drainDelta")) / 100;
+  const revenue = collectRevenue();
+  const energyPrice = getEnergyPrice();
+
+  const substrateA = (n("matPriceA") * n("matsPerHa") * (1 + n("wasteA") / 100) * area) / 10000;
+  const substrateB = (n("matPriceB") * n("matsPerHa") * (1 + n("wasteB") / 100) * area) / 10000;
+  const waterLitersA = n("waterUse") / Math.max(0.01, 1 - drainA);
+  const waterLitersB = n("waterUse") / Math.max(0.01, 1 - drainB);
+  const waterA = (waterLitersA / 1000) * area * days * n("waterPrice");
+  const waterB = (waterLitersB / 1000) * area * days * n("waterPrice");
+  const fertA = (waterLitersA / 1000) * area * days * n("fertilizerPrice");
+  const fertB = (waterLitersB / 1000) * area * days * n("fertilizerPrice");
+  const energy = n("electricityUse") * energyPrice * area * days;
+  const protection = getProtectionCost(area, days);
+  const gas = n("gasUse") * n("gasPrice") * area * days;
+  const labor = n("staffPerHa") * 8 * n("laborHourPrice") * days * area / 10000;
+  const seeds = n("plantDensity") * n("seedPrice") * area;
+  const packA = revenue.yieldA * area / Math.max(0.1, n("packKg")) * n("packPrice");
+  const packB = revenue.yieldB * area / Math.max(0.1, n("packKg")) * n("packPrice");
+
+  const costA = substrateA + waterA + fertA + energy + gas + protection + labor + seeds + packA;
+  const costB = substrateB + waterB + fertB + energy + gas + protection + labor + seeds + packB;
+  const profitA = revenue.revenueA - costA;
+  const profitB = revenue.revenueB - costB;
+  const extraRevenue = revenue.revenueA - revenue.revenueB;
+  const substrateDelta = substrateA - substrateB;
+  const waterSaving = waterB - waterA;
+  const fertSaving = fertB - fertA;
+  const packDelta = packA - packB;
+  const profitDelta = profitA - profitB;
+  const cleanExtraCost = substrateDelta - waterSaving - fertSaving;
+  const avgPrice = revenue.avgPriceA || revenue.avgPriceB || n("simplePrice");
+  const breakEvenKg = cleanExtraCost / Math.max(1, avgPrice * area);
+  const earlyStart = firstHarvestOffset(revenue.periods);
+
+  return {
+    area,
+    days,
+    drainB,
+    energyPrice,
+    revenue,
+    costs: {
+      substrateA,
+      substrateB,
+      waterA,
+      waterB,
+      fertA,
+      fertB,
+      energy,
+      gas,
+      protection,
+      labor,
+      seeds,
+      packA,
+      packB,
+      costA,
+      costB,
+    },
+    profitA,
+    profitB,
+    profitDelta,
+    extraRevenue,
+    substrateDelta,
+    waterSaving,
+    fertSaving,
+    packDelta,
+    breakEvenKg,
+    earlyStart,
+  };
+}
+
+function getEnergyPrice() {
+  const mode = $("energyMode").value;
+  if (mode === "gpu") return n("gpuPrice");
+  if (mode === "grid") return n("gridPrice");
+  const share = n("gpuShare") / 100;
+  return n("gpuPrice") * share + n("gridPrice") * (1 - share);
+}
+
+function getProtectionCost(area, days) {
+  if ($("protectionMode").value === "cycle") {
+    return n("chemCycle") + n("bioCycle") + n("entoCycle");
+  }
+  return area * days * (n("chemDaily") + n("bioDaily") + n("entoDaily"));
+}
+
+function firstHarvestOffset(periods) {
+  const dateA = parseDate($("harvestStartA").value);
+  const dateB = parseDate($("harvestStartB").value);
+  if (dateA && dateB) return Math.round((dateB - dateA) / 86400000);
+  const a = periods.findIndex((row) => row.yieldA > 0.001);
+  const b = periods.findIndex((row) => row.yieldB > 0.001);
+  if (a < 0 || b < 0) return 0;
+  const periodDays = $("revenueMode").value === "monthly" ? 30 : $("revenueMode").value === "weekly" ? 7 : n("cycleDays");
+  return (b - a) * periodDays;
+}
+
+function update() {
+  $("gpuShareLabel").textContent = `${n("gpuShare")}%`;
+  $("gpuShareWrap").classList.toggle("hidden", $("energyMode").value !== "mix");
+  $("protectionDaily").classList.toggle("hidden", $("protectionMode").value !== "daily");
+  $("protectionCycle").classList.toggle("hidden", $("protectionMode").value !== "cycle");
+  $("drainBLabel").textContent = `${number(n("drainA") + n("drainDelta"), 0)}%`;
+
+  const result = calculate();
+  const good = result.profitDelta >= 0;
+  $("resultBadge").textContent = good ? "А выгоднее" : "А не окупается";
+  $("resultBadge").className = `badge ${good ? "good" : "bad"}`;
+  $("topProfit").textContent = money(result.profitDelta);
+  $("profitDelta").textContent = money(result.profitDelta);
+  $("breakEven").textContent = `${number(result.breakEvenKg, 2)} кг/м2`;
+  $("avgPrices").textContent = `${number(result.revenue.avgPriceA, 0)} / ${number(result.revenue.avgPriceB, 0)} руб.`;
+  $("earlyStart").textContent = `${number(result.earlyStart, 0)} дней`;
+  $("decisionTitle").textContent = good ? "Субстрат А окупается" : "Прибавки пока недостаточно";
+  $("decisionText").textContent = good
+    ? `Директор видит ${money(result.profitDelta)} дополнительной прибыли, агрономический минимум окупаемости - ${number(result.breakEvenKg, 2)} кг/м2.`
+    : `Для окупаемости нужно добрать урожайность или попасть в более дорогие периоды реализации. Текущая разница: ${money(result.profitDelta)}.`;
+
+  drawWaterfall(result);
+  drawPeriodChart(result);
+  drawHeatmap(result);
+  drawSummary(result);
+}
+
+function drawWaterfall(result) {
+  const items = [
+    ["Доп. выручка", result.extraRevenue],
+    ["Переплата за мат", -result.substrateDelta],
+    ["Экономия удобрений", result.fertSaving],
+    ["Экономия воды", result.waterSaving],
+    ["Доп. тара", -result.packDelta],
+    ["Итог", result.profitDelta],
+  ];
+  const max = Math.max(...items.map(([, value]) => Math.abs(value)), 1);
+  $("waterfall").innerHTML = items
+    .map(([label, value]) => {
+      const width = Math.max(2, Math.abs(value) / max * 100);
+      const good = value >= 0;
+      return `
+        <div class="barRow">
+          <div class="barLabel">${label}</div>
+          <div class="barTrack"><div class="barFill ${good ? "good" : "bad"}" style="width:${width}%"></div></div>
+          <div class="barValue">${money(value)}</div>
+        </div>`;
+    })
+    .join("");
+}
+
+function drawPeriodChart(result) {
+  const periods = result.revenue.periods;
+  const width = 720;
+  const height = 260;
+  const pad = 28;
+  const maxRev = Math.max(...periods.flatMap((row) => [row.revenueA, row.revenueB]), 1);
+  const x = (i) => pad + (i / Math.max(1, periods.length - 1)) * (width - pad * 2);
+  const y = (v) => height - pad - (v / maxRev) * (height - pad * 2);
+  const line = (key) => periods.map((row, i) => `${x(i)},${y(row[key])}`).join(" ");
+  $("periodChart").innerHTML = `
+    <div class="lineChart">
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Выручка по периодам">
+        <line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="#cbd5ce" />
+        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${height - pad}" stroke="#cbd5ce" />
+        <polyline points="${line("revenueA")}" fill="none" stroke="#1f8a5b" stroke-width="3" />
+        <polyline points="${line("revenueB")}" fill="none" stroke="#2f6f92" stroke-width="3" />
+        ${periods
+          .filter((_, i) => i % Math.ceil(periods.length / 8) === 0)
+          .map((row, i) => {
+            const idx = periods.indexOf(row);
+            return `<text x="${x(idx)}" y="${height - 7}" text-anchor="middle" font-size="10" fill="#66726d">${row.label.replace("Нед. ", "")}</text>`;
+          })
+          .join("")}
+      </svg>
+      <div class="legend"><span>Субстрат А</span><span>Субстрат Б</span></div>
+    </div>`;
+}
+
+function drawHeatmap(result) {
+  const yieldDeltas = [0, 0.2, 0.5, 1, 1.5, 2, 3];
+  const prices = state.crop === "cucumber" ? [50, 80, 110, 130, 150, 200, 270] : [60, 80, 95, 110, 130, 160, 200];
+  const baseYield = result.revenue.yieldB;
+  const area = result.area;
+  const cleanExtraCost = result.substrateDelta - result.waterSaving - result.fertSaving;
+  const html = `
+    <table>
+      <thead><tr><th>Прибавка / Цена</th>${prices.map((p) => `<th>${p} руб.</th>`).join("")}</tr></thead>
+      <tbody>
+        ${yieldDeltas
+          .map((delta) => {
+            const cells = prices
+              .map((price) => {
+                const value = delta * area * price - cleanExtraCost;
+                const opacity = Math.min(1, Math.abs(value) / Math.max(1, cleanExtraCost * 3));
+                const bg = value >= 0 ? `rgba(31,138,91,${0.14 + opacity * 0.52})` : `rgba(186,63,58,${0.12 + opacity * 0.5})`;
+                return `<td class="heatCell" style="background:${bg}">${money(value)}</td>`;
+              })
+              .join("");
+            return `<tr><th>+${number(delta, 1)} кг/м2</th>${cells}</tr>`;
+          })
+          .join("")}
+      </tbody>
+    </table>
+    <p class="hint">База Б: ${number(baseYield, 1)} кг/м2. Матрица изолирует эффект доп. урожая, цены, переплаты за мат и экономии воды/удобрений.</p>`;
+  $("heatmap").innerHTML = html;
+}
+
+function drawSummary(result) {
+  const rows = [
+    ["Выручка А", money(result.revenue.revenueA)],
+    ["Выручка Б", money(result.revenue.revenueB)],
+    ["Урожайность А", `${number(result.revenue.yieldA, 2)} кг/м2`],
+    ["Урожайность Б", `${number(result.revenue.yieldB, 2)} кг/м2`],
+    ["Средневзвешенная цена А", `${number(result.revenue.avgPriceA, 1)} руб./кг`],
+    ["Средневзвешенная цена Б", `${number(result.revenue.avgPriceB, 1)} руб./кг`],
+    ["Цена стандарта А / Б", `${number(result.revenue.avgStandardPriceA, 1)} / ${number(result.revenue.avgStandardPriceB, 1)} руб./кг`],
+    ["Цена нестандарта А / Б", `${number(result.revenue.avgOffgradePriceA, 1)} / ${number(result.revenue.avgOffgradePriceB, 1)} руб./кг`],
+    ["Цена электроэнергии в расчете", `${number(result.energyPrice, 2)} руб./кВтч`],
+    ["Дренаж А / Б", `${number(n("drainA"), 0)}% / ${number(n("drainA") + n("drainDelta"), 0)}%`],
+    ["Экономия удобрений", money(result.fertSaving)],
+    ["Экономия воды", money(result.waterSaving)],
+    ["Электроэнергия", money(result.costs.energy)],
+    ["Газ / тепло", money(result.costs.gas)],
+    ["Защита растений", money(result.costs.protection)],
+    ["Труд", money(result.costs.labor)],
+    ["Семена", money(result.costs.seeds)],
+    ["Итого затраты А", money(result.costs.costA)],
+    ["Итого затраты Б", money(result.costs.costB)],
+    ["Прибыль А", money(result.profitA)],
+    ["Прибыль Б", money(result.profitB)],
+    ["Доп. прибыль А против Б", money(result.profitDelta)],
+  ];
+  $("summaryTable").innerHTML = `
+    <table>
+      <thead><tr><th>Показатель</th><th>Значение</th></tr></thead>
+      <tbody>${rows.map(([label, value]) => `<tr><td>${label}</td><td><strong>${value}</strong></td></tr>`).join("")}</tbody>
+    </table>`;
+}
+
+function round(value, digits) {
+  const factor = 10 ** digits;
+  return Math.round((Number(value) + Number.EPSILON) * factor) / factor;
+}
+
+function parseDate(value) {
+  if (!value) return null;
+  const date = new Date(`${value}T00:00:00`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function addDays(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function formatShortDate(date) {
+  return date.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" });
+}
+
+function monthLabel(date) {
+  return date.toLocaleDateString("ru-RU", { month: "short" }).replace(".", "");
+}
+
+setup();
+</script>
+  </body>
+</html>
