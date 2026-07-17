@@ -628,7 +628,15 @@ td input {
               <input id="drainDelta" type="number" step="1" value="5" />
             </label>
           </div>
+          <label>
+            Тип дренажа
+            <select id="drainMode">
+              <option value="open">Открытый дренаж - считать экономию воды и удобрений</option>
+              <option value="recirculated">Обратный дренаж - не учитывать экономию воды и удобрений</option>
+            </select>
+          </label>
           <p class="metric">Дренаж Б: <strong id="drainBLabel">30%</strong></p>
+          <p id="drainModeNote" class="hint">При открытом дренаже меньший дренаж субстрата А уменьшает расход воды и рабочего раствора.</p>
         </section>
 
         <section class="panel">
@@ -900,6 +908,7 @@ const inputIds = [
   "wasteB",
   "drainA",
   "drainDelta",
+  "drainMode",
   "waterPreset",
   "waterUse",
   "waterPrice",
@@ -1205,6 +1214,7 @@ function calculate() {
   const days = n("cycleDays");
   const drainA = n("drainA") / 100;
   const drainB = (n("drainA") + n("drainDelta")) / 100;
+  const isRecirculatedDrain = $("drainMode").value === "recirculated";
   const revenue = collectRevenue();
   const energyPrice = getEnergyPrice();
 
@@ -1212,10 +1222,14 @@ function calculate() {
   const substrateB = (n("matPriceB") * n("matsPerHa") * (1 + n("wasteB") / 100) * area) / 10000;
   const waterLitersA = n("waterUse") / Math.max(0.01, 1 - drainA);
   const waterLitersB = n("waterUse") / Math.max(0.01, 1 - drainB);
-  const waterA = (waterLitersA / 1000) * area * days * n("waterPrice");
-  const waterB = (waterLitersB / 1000) * area * days * n("waterPrice");
-  const fertA = (waterLitersA / 1000) * area * days * n("fertilizerPrice");
-  const fertB = (waterLitersB / 1000) * area * days * n("fertilizerPrice");
+  const potentialWaterA = (waterLitersA / 1000) * area * days * n("waterPrice");
+  const potentialWaterB = (waterLitersB / 1000) * area * days * n("waterPrice");
+  const potentialFertA = (waterLitersA / 1000) * area * days * n("fertilizerPrice");
+  const potentialFertB = (waterLitersB / 1000) * area * days * n("fertilizerPrice");
+  const waterA = potentialWaterA;
+  const waterB = isRecirculatedDrain ? potentialWaterA : potentialWaterB;
+  const fertA = potentialFertA;
+  const fertB = isRecirculatedDrain ? potentialFertA : potentialFertB;
   const energy = n("electricityUse") * energyPrice * area * days;
   const protection = getProtectionCost(area, days);
   const gas = n("gasUse") * n("gasPrice") * area * days;
@@ -1230,8 +1244,10 @@ function calculate() {
   const profitB = revenue.revenueB - costB;
   const extraRevenue = revenue.revenueA - revenue.revenueB;
   const substrateDelta = substrateA - substrateB;
-  const waterSaving = waterB - waterA;
-  const fertSaving = fertB - fertA;
+  const potentialWaterSaving = potentialWaterB - potentialWaterA;
+  const potentialFertSaving = potentialFertB - potentialFertA;
+  const waterSaving = isRecirculatedDrain ? 0 : potentialWaterSaving;
+  const fertSaving = isRecirculatedDrain ? 0 : potentialFertSaving;
   const packDelta = packA - packB;
   const profitDelta = profitA - profitB;
   const cleanExtraCost = substrateDelta - waterSaving - fertSaving;
@@ -1243,6 +1259,7 @@ function calculate() {
     area,
     days,
     drainB,
+    drainMode: $("drainMode").value,
     energyPrice,
     revenue,
     costs: {
@@ -1252,6 +1269,8 @@ function calculate() {
       waterB,
       fertA,
       fertB,
+      potentialWaterSaving,
+      potentialFertSaving,
       energy,
       gas,
       protection,
@@ -1307,6 +1326,10 @@ function update() {
   $("protectionDaily").classList.toggle("hidden", $("protectionMode").value !== "daily");
   $("protectionCycle").classList.toggle("hidden", $("protectionMode").value !== "cycle");
   $("drainBLabel").textContent = `${number(n("drainA") + n("drainDelta"), 0)}%`;
+  $("drainModeNote").textContent =
+    $("drainMode").value === "recirculated"
+      ? "Обратный дренаж: экономия воды и удобрений от меньшего дренажа не включается в финансовый результат."
+      : "Открытый дренаж: меньший дренаж субстрата А уменьшает расход воды и рабочего раствора.";
 
   const result = calculate();
   const good = result.profitDelta >= 0;
@@ -1421,8 +1444,11 @@ function drawSummary(result) {
     ["Цена нестандарта А / Б", `${number(result.revenue.avgOffgradePriceA, 1)} / ${number(result.revenue.avgOffgradePriceB, 1)} руб./кг`],
     ["Цена электроэнергии в расчете", `${number(result.energyPrice, 2)} руб./кВтч`],
     ["Дренаж А / Б", `${number(n("drainA"), 0)}% / ${number(n("drainA") + n("drainDelta"), 0)}%`],
+    ["Тип дренажа", result.drainMode === "recirculated" ? "Обратный дренаж, экономия не учтена" : "Открытый дренаж, экономия учтена"],
     ["Экономия удобрений", money(result.fertSaving)],
     ["Экономия воды", money(result.waterSaving)],
+    ["Потенциал экономии удобрений по дренажу", money(result.costs.potentialFertSaving)],
+    ["Потенциал экономии воды по дренажу", money(result.costs.potentialWaterSaving)],
     ["Электроэнергия", money(result.costs.energy)],
     ["Газ / тепло", money(result.costs.gas)],
     ["Защита растений", money(result.costs.protection)],
