@@ -1,24 +1,26 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ROI-калькулятор субстрата для тепличных комбинатов</title>
+<!DOCTYPE html>
+<html lang="ru"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Калькулятор экономического эффекта субстрата</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>:root {
   --bg: #f4f5f1;
   --panel: #ffffff;
   --ink: #18211f;
   --muted: #66726d;
   --line: #d9ded8;
-  --green: #1f8a5b;
-  --green-dark: #12613f;
+  --green: #009933;
+  --green-dark: #006b24;
   --red: #ba3f3a;
   --amber: #c9821f;
-  --blue: #2f6f92;
-  --soft-green: #e8f4ed;
+  --blue: #0097a9;
+  --soft-green: #e8f6ed;
   --soft-red: #f8e8e6;
-  --soft-blue: #e7f0f5;
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  --soft-blue: #e6f5f6;
+  font-family: "Golos Text", Arial, "Segoe UI", sans-serif;
 }
 
 * {
@@ -75,6 +77,38 @@ h2 {
   text-transform: uppercase;
 }
 
+.topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brandMark {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.brandWordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.brandTagline {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
 .topbar__summary {
   display: grid;
   min-width: 240px;
@@ -88,6 +122,25 @@ h2 {
 
 .topbar__summary small {
   color: var(--muted);
+}
+
+.topbar__breakeven {
+  margin-top: 2px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.introText {
+  max-width: 900px;
+  margin: 16px 18px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--soft-green);
+  color: var(--green-dark);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .badge {
@@ -147,6 +200,19 @@ h2 {
   padding: 14px;
 }
 
+.modePanel {
+  border: 1px solid #b8d9c8;
+  border-radius: 8px;
+  background: var(--soft-green);
+  padding: 12px 14px;
+}
+
+.modePanel .hint {
+  margin-top: 8px;
+  margin-bottom: 0;
+  color: var(--green-dark);
+}
+
 label {
   display: grid;
   gap: 6px;
@@ -189,6 +255,31 @@ select:focus {
   gap: 10px;
 }
 
+.quickButtons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.quickButtons button {
+  min-height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfcfa;
+  color: #33403b;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.quickButtons button:hover,
+.ghostButton:hover {
+  border-color: #b8d9c8;
+  background: var(--soft-green);
+  color: var(--green-dark);
+}
+
 .segmented {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -223,11 +314,99 @@ select:focus {
   padding: 0 14px;
 }
 
+.ghostButton--small {
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.draftBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 18px 0;
+  padding: 10px 14px;
+  border: 1px solid #b8d9c8;
+  border-radius: 8px;
+  background: var(--soft-green);
+  color: var(--green-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.draftBanner__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dataToolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 18px 0;
+}
+
+.dataToolbar__msg {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
 .hint {
   margin-top: 8px;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.45;
+}
+
+.hint--warning {
+  color: #8a5a00;
+  background: #fdf3dc;
+  border: 1px solid #f0d896;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-weight: 600;
+}
+
+.srcTag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.srcTag--confirmed {
+  background: var(--soft-green);
+  color: var(--green-dark);
+}
+
+.srcTag--partial {
+  background: #fdf3dc;
+  color: #8a5a00;
+}
+
+.srcTag--estimate {
+  background: #f3e3ea;
+  color: #8a3a5a;
+}
+
+.footnotes {
+  max-width: 1200px;
+  margin: 24px auto 12px;
+  padding: 12px 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.footnotes .hint {
+  font-size: 10.5px;
+  margin-top: 6px;
 }
 
 .metric {
@@ -236,6 +415,12 @@ select:focus {
   border-radius: 6px;
   background: #f7f8f5;
   color: var(--muted);
+}
+
+.metric.compact {
+  margin-top: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
 }
 
 .metric strong {
@@ -309,6 +494,11 @@ select:focus {
   line-height: 1.45;
 }
 
+.inlineSettings {
+  max-width: 520px;
+  margin-bottom: 12px;
+}
+
 .tableWrap {
   overflow: auto;
   border: 1px solid var(--line);
@@ -337,6 +527,12 @@ th {
   background: #f7f8f5;
   color: #3d4844;
   font-size: 12px;
+}
+
+tfoot th {
+  border-top: 2px solid var(--line);
+  background: #eef6ef;
+  color: var(--green-dark);
 }
 
 td input {
@@ -400,6 +596,20 @@ td input {
   text-align: right;
 }
 
+.barSign {
+  display: inline-block;
+  width: 14px;
+  font-weight: 900;
+}
+
+.barSign.good {
+  color: var(--green);
+}
+
+.barSign.bad {
+  color: var(--red);
+}
+
 .lineChart {
   position: relative;
   min-height: 280px;
@@ -432,6 +642,7 @@ td input {
 
 .legend span:nth-child(2)::before {
   background: var(--blue);
+  border-radius: 2px;
 }
 
 .heatmap {
@@ -446,13 +657,59 @@ td input {
   font-weight: 800;
 }
 
+.heatMark {
+  margin-right: 4px;
+  font-weight: 900;
+}
+
 .summaryTable table {
   table-layout: fixed;
+}
+
+.summaryTable h3 {
+  margin: 16px 0 8px;
+  color: #24312d;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.summaryTable h3:first-child {
+  margin-top: 0;
 }
 
 .summaryTable td:last-child,
 .summaryTable th:last-child {
   text-align: right;
+}
+
+.summaryNotes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.summaryNotes div {
+  min-height: 54px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f7f8f5;
+}
+
+.summaryNotes span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.summaryNotes strong {
+  display: block;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.25;
 }
 
 @media (max-width: 1120px) {
@@ -488,8 +745,13 @@ td input {
 
   .grid2,
   .grid4,
-  .kpis {
+  .kpis,
+  .summaryNotes {
     grid-template-columns: 1fr;
+  }
+
+  .quickButtons {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .sectionHead {
@@ -505,29 +767,114 @@ td input {
     padding: 7px;
   }
 }
+
+@media print {
+  .sidebar,
+  .draftBanner,
+  .dataToolbar,
+  .introText,
+  #periodTablePanel,
+  #periodChartPanel,
+  #heatmapPanel,
+  .footnotes {
+    display: none !important;
+  }
+
+  .topbar {
+    position: static;
+  }
+
+  .layout {
+    display: block;
+    padding: 0;
+  }
+
+  .workspace {
+    display: block;
+  }
+
+  .workspace > * + * {
+    margin-top: 14px;
+  }
+
+  .chartsGrid {
+    display: block;
+  }
+
+  .panel {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #cbd5ce;
+  }
+}
 </style>
   </head>
   <body>
     <header class="topbar">
-      <div>
-        <p class="eyebrow">МПС субстрата</p>
-        <h1>ROI-калькулятор для тепличных комбинатов</h1>
+      <div class="topbar__brand">
+        <svg class="brandMark" viewBox="0 0 100 100" role="img" aria-label="Р-ГРУНТ">
+          <rect width="100" height="100" rx="14" fill="#009933"></rect>
+          <polygon points="25.1,30.5 49.5,12.3 25.2,12.3" fill="#ffffff"></polygon>
+          <polygon points="99.9,56.0 75.1,31.2 43.8,62.6 24.9,43.9 0,68.8 0,93.5 25.0,68.7 43.9,87.3 75.0,56.2 99.9,80.7" fill="#ffffff"></polygon>
+        </svg>
+        <div>
+          <p class="brandWordmark">Р-ГРУНТ<span class="brandTagline">Создано природой</span></p>
+          <p class="eyebrow">Для тепличных комбинатов</p>
+          <h1>Калькулятор экономического эффекта субстрата</h1>
+        </div>
       </div>
       <div class="topbar__summary">
-        <span id="resultBadge" class="badge">Расчет</span>
-        <strong id="topProfit">0 руб.</strong>
+        <span id="resultBadge" class="badge good">А выгоднее</span>
+        <strong id="topProfit">734&nbsp;556 руб.</strong>
         <small>доп. прибыль А против Б</small>
+        <small id="topBreakEven" class="topbar__breakeven">окупаемость: 0,19 кг/м2</small>
       </div>
     </header>
 
+    <p class="introText">
+      Калькулятор не считает ROI% субстрата. Он показывает полную стоимость владения (ТСО) двух вариантов субстрата - А и Б - через
+      дополнительную прибыль, которую теплица получает за оборот за счет разницы в урожайности, дренаже и стоимости мата. Заполните
+      параметры слева (для большинства уже стоят справочные значения) - справа сразу увидите дельту прибыли, точку окупаемости
+      переплаты за мат и разбивку по факторам.
+    </p>
+
+    <div id="draftBanner" class="draftBanner hidden">
+      <span id="draftBannerText">Черновик восстановлен</span>
+      <div class="draftBanner__actions">
+        <button type="button" id="draftDismiss" class="ghostButton ghostButton--small">Скрыть</button>
+        <button type="button" id="draftReset" class="ghostButton ghostButton--small">Начать заново</button>
+      </div>
+    </div>
+
+    <div class="dataToolbar">
+      <button type="button" id="exportJson" class="ghostButton ghostButton--small">Сохранить расчёт (файл)</button>
+      <button type="button" id="importJsonTrigger" class="ghostButton ghostButton--small">Загрузить расчёт (файл)</button>
+      <input type="file" id="importJsonFile" accept="application/json,.json" class="hidden" />
+      <button type="button" id="printView" class="ghostButton ghostButton--small">Печать результатов</button>
+      <span id="dataToolbarMsg" class="dataToolbar__msg" aria-live="polite"></span>
+    </div>
+
     <main class="layout">
       <aside class="sidebar">
+        <div class="modePanel">
+          <div class="segmented" role="group" aria-label="Режим ввода параметров">
+            <button type="button" id="modeQuick" class="segment active">Быстрый ввод</button>
+            <button type="button" id="modeAdvanced" class="segment">Все параметры</button>
+          </div>
+          <p id="modeHint" class="hint">Показаны ключевые параметры сравнения. Остальное - справочные значения по умолчанию, откройте «Все параметры», чтобы их изменить.</p>
+        </div>
+
         <section class="panel">
           <h2>Культура и режим</h2>
           <div class="segmented" role="group" aria-label="Культура">
             <button class="segment active" data-crop="cucumber">Огурец</button>
             <button class="segment" data-crop="tomato">Томат</button>
           </div>
+          <label>
+            Гибрид
+            <select id="hybridPreset"></select>
+          </label>
+          <p id="hybridNote" class="hint"></p>
           <label>
             Метод выручки
             <select id="revenueMode">
@@ -537,31 +884,102 @@ td input {
             </select>
           </label>
           <label>
-            Площадь отделения, м2
-            <input id="area" type="number" min="1" step="100" value="10000" />
+            Площадь отделения, га
+            <input id="areaHa" type="number" min="0.01" step="0.1" value="1">
           </label>
+          <div class="quickButtons" aria-label="Быстрый выбор площади">
+            <button type="button" data-area-ha="0.5">0.5 га</button>
+            <button type="button" data-area-ha="1">1 га</button>
+            <button type="button" data-area-ha="2">2 га</button>
+            <button type="button" data-area-ha="5">5 га</button>
+            <button type="button" data-area-ha="10">10 га</button>
+          </div>
+          <p class="metric compact">Площадь в расчете: <strong id="areaM2Label">10&nbsp;000 м2</strong></p>
           <label>
             Длительность оборота, дней
-            <input id="cycleDays" type="number" min="1" step="1" value="92" />
+            <input id="cycleDays" type="number" min="1" step="1" value="92">
           </label>
           <label>
-            Дата начала оборота
-            <input id="cycleStart" type="date" value="2026-01-05" />
+            Даты оборота
+            <select id="cycleTimingMode">
+              <option value="same" selected="">Одинаковые для А и Б</option>
+              <option value="different">Разные даты по субстратам</option>
+            </select>
           </label>
-          <div class="grid2">
+          <div id="cycleCommonWrap">
             <label>
-              Старт сбора А
-              <input id="harvestStartA" type="date" value="2026-02-02" />
+              Дата выноса рассады в теплицу (начало оборота)
+              <input id="cycleStart" type="date" value="2026-01-05">
             </label>
             <label>
-              Старт сбора Б
-              <input id="harvestStartB" type="date" value="2026-02-09" />
+              Дата окончания оборота
+              <input id="cycleEnd" type="date" value="2026-04-06">
             </label>
           </div>
+          <div id="cycleSplitWrap" class="hidden">
+            <div class="grid2">
+              <label>
+                Начало оборота А
+                <input id="cycleStartA" type="date" value="2026-01-05">
+              </label>
+              <label>
+                Окончание оборота А
+                <input id="cycleEndA" type="date" value="2026-04-06">
+              </label>
+            </div>
+            <div class="grid2">
+              <label>
+                Начало оборота Б
+                <input id="cycleStartB" type="date" value="2026-01-05">
+              </label>
+              <label>
+                Окончание оборота Б
+                <input id="cycleEndB" type="date" value="2026-04-06">
+              </label>
+            </div>
+          </div>
+          <label>
+            Сроки начала сборов
+            <select id="harvestTimingMode">
+              <option value="same" selected="">Одинаковые для А и Б</option>
+              <option value="different">Разные сроки сборов</option>
+            </select>
+          </label>
+          <div class="grid2">
+            <label id="harvestStartAWrap">
+              <span id="harvestStartALabel">Старт сбора А и Б</span>
+              <input id="harvestStartA" type="date" value="2026-02-02">
+            </label>
+            <label id="harvestStartBWrap" class="hidden">
+              Старт сбора Б
+              <input id="harvestStartB" type="date" value="2026-02-02">
+            </label>
+          </div>
+          <p class="hint">По умолчанию старт сборов рассчитывается от даты выноса рассады: для огурца +28 дней, для томата +63 дня. Дату можно изменить вручную.</p>
         </section>
 
-        <section class="panel">
+        <section class="panel advancedPanel">
+          <h2>НДС и справочники</h2>
+          <label>
+            Формат денежных полей
+            <select id="vatMode">
+              <option value="net" selected="">Без НДС</option>
+              <option value="gross">С НДС, пересчитать в расчет без НДС</option>
+            </select>
+          </label>
+          <label>
+            Ставка НДС, %
+            <input id="vatRate" type="number" min="0" step="1" value="22">
+          </label>
+        </section>
+
+        <section class="panel advancedPanel">
           <h2>Энергия</h2>
+          <label>
+            Справочник тарифов
+            <select id="energyPreset"></select>
+          </label>
+          <p class="hint"><span class="srcTag srcTag--confirmed">✓ подтверждено</span>Ориентиры по открытым источникам (регулируемый газ, средний коммерческий тариф сети, себестоимость ГПУ) - подставляет и цены, и газ ниже. Проверьте по своему договору.</p>
           <label>
             Источник
             <select id="energyMode">
@@ -573,23 +991,23 @@ td input {
           <div class="grid2">
             <label>
               ГПУ, руб./кВтч
-              <input id="gpuPrice" type="number" step="0.1" value="3.2" />
+              <input id="gpuPrice" type="number" step="0.1" value="3.2">
             </label>
             <label>
               Сети, руб./кВтч
-              <input id="gridPrice" type="number" step="0.1" value="9" />
+              <input id="gridPrice" type="number" step="0.1" value="9">
             </label>
           </div>
-          <label id="gpuShareWrap">
+          <label id="gpuShareWrap" class="hidden">
             Доля ГПУ в миксе, %
-            <input id="gpuShare" type="range" min="0" max="100" value="70" />
+            <input id="gpuShare" type="range" min="0" max="100" value="70">
             <span id="gpuShareLabel">70%</span>
           </label>
           <label>
             Расход, кВтч/м2/сут
-            <input id="electricityUse" type="number" step="0.01" value="2.33" />
+            <input id="electricityUse" type="number" step="0.01" value="2.33">
           </label>
-          <p class="hint">Цена микса считается средневзвешенно. Для MVP расходы энергии одинаковы для А и Б.</p>
+          <p class="hint">Цена микса считается средневзвешенно. Расход энергии в текущей модели одинаков для субстрата А и Б.</p>
         </section>
 
         <section class="panel">
@@ -597,35 +1015,51 @@ td input {
           <div class="grid2">
             <label>
               Цена мата А, руб.
-              <input id="matPriceA" type="number" step="1" value="130" />
+              <input id="matPriceA" type="number" step="1" value="130">
             </label>
             <label>
               Цена мата Б, руб.
-              <input id="matPriceB" type="number" step="1" value="78" />
+              <input id="matPriceB" type="number" step="1" value="78">
             </label>
           </div>
           <label>
             Матов на га, шт.
-            <input id="matsPerHa" type="number" step="100" value="6000" />
+            <input id="matsPerHa" type="number" step="100" value="6000">
           </label>
           <div class="grid2">
             <label>
               Страховой фонд А, %
-              <input id="wasteA" type="number" step="0.1" value="1" />
+              <input id="wasteA" type="number" step="0.1" value="1">
             </label>
             <label>
               Страховой фонд Б, %
-              <input id="wasteB" type="number" step="0.1" value="2" />
+              <input id="wasteB" type="number" step="0.1" value="2">
             </label>
           </div>
+          <label>
+            Справочник дренажа
+            <select id="drainPreset"></select>
+          </label>
+          <p class="hint"><span class="srcTag srcTag--estimate">? оценка</span>Общеотраслевые ориентиры по типу системы, не привязаны к конкретному объекту - подставляет дренаж А и разницу с Б, значения можно поправить вручную.</p>
+          <label>
+            Как задать дренаж Б
+            <select id="drainInputMode">
+              <option value="delta" selected="">Через разницу с А, п.п.</option>
+              <option value="direct">Ввести дренаж Б напрямую, %</option>
+            </select>
+          </label>
           <div class="grid2">
             <label>
               Дренаж А, %
-              <input id="drainA" type="number" step="1" value="25" />
+              <input id="drainA" type="number" step="1" value="25">
             </label>
-            <label>
+            <label id="drainDeltaWrap">
               Разница Б к А, п.п.
-              <input id="drainDelta" type="number" step="1" value="5" />
+              <input id="drainDelta" type="number" step="1" value="5">
+            </label>
+            <label id="drainDirectWrap" class="hidden">
+              Дренаж Б, %
+              <input id="drainB" type="number" step="1" value="30">
             </label>
           </div>
           <label>
@@ -636,111 +1070,141 @@ td input {
             </select>
           </label>
           <p class="metric">Дренаж Б: <strong id="drainBLabel">30%</strong></p>
-          <p id="drainModeNote" class="hint">При открытом дренаже меньший дренаж субстрата А уменьшает расход воды и рабочего раствора.</p>
+          <p id="drainModeNote" class="hint">Открытый дренаж: меньший дренаж субстрата А уменьшает расход воды и рабочего раствора.</p>
         </section>
 
-        <section class="panel">
+        <section class="panel advancedPanel">
           <h2>Вода и защита</h2>
+          <label>
+            Метод расчета воды
+            <select id="waterCalcMode">
+              <option value="radiation" selected="">По радиации: тыс. Дж x коэффициент воды</option>
+              <option value="manual">Ручной расход, л/м2/сут</option>
+            </select>
+          </label>
           <label>
             Регион / радиация
             <select id="waterPreset">
               <option value="spb">Санкт-Петербург: 1.5 тыс. Дж</option>
-              <option value="central" selected>Средняя полоса: 2.0 тыс. Дж</option>
+              <option value="central" selected="">Средняя полоса: 2.0 тыс. Дж</option>
               <option value="south">Юг: 2.7 тыс. Дж</option>
               <option value="manual">Ручной ввод</option>
             </select>
           </label>
+          <div id="waterRadiationWrap" class="grid2">
+            <label>
+              Освещенность за оборот, тыс. Дж
+              <input id="radiationKj" type="number" step="0.1" value="2.0">
+            </label>
+            <label>
+              Коэффициент воды, л/м2 на 1 тыс. Дж
+              <input id="waterCoef" type="number" step="0.1" value="165.6">
+            </label>
+          </div>
           <div class="grid2">
             <label>
               Вода без дренажа, л/м2/сут
-              <input id="waterUse" type="number" step="0.1" value="3.0" />
+              <input id="waterUse" type="number" step="0.01" value="3.6">
             </label>
             <label>
               Цена воды, руб./м3
-              <input id="waterPrice" type="number" step="0.1" value="0.75" />
+              <input id="waterPrice" type="number" step="0.1" value="0.75">
             </label>
           </div>
+          <p id="waterManualHint" class="hint hidden">В ручном режиме радиация справочно не влияет на расчет.</p>
+          <p id="waterLongCycleWarning" class="hint hint--warning hidden">Формула «радиация × коэффициент» откалибрована на короткий оборот (~90 дней, как у огурца) и делит освещенность за оборот на фактическую длительность - для длинных оборотов (например, томат, ~330 дней) она занижает расход воды в разы. Для длинных оборотов используйте ручной ввод с реальным расходом с климат-компьютера.</p>
+          <p class="metric compact">Вода без дренажа: <strong id="waterBaseLabel">3,60 л/м2/сут; 331 л/м2 за оборот</strong></p>
+          <p class="metric compact">Подача раствора А / Б с учетом дренажа: <strong id="waterSolutionLabel">442 / 473 л/м2</strong></p>
           <label>
             Раствор удобрений, руб./м3
-            <input id="fertilizerPrice" type="number" step="1" value="302" />
+            <input id="fertilizerPrice" type="number" step="1" value="302">
           </label>
+          <label>
+            Справочник программы защиты
+            <select id="protectionPreset"></select>
+          </label>
+          <p class="hint"><span class="srcTag srcTag--partial">~ частично подтверждено</span>Подставляет суммы за оборот по трем блокам (переключает расчет защиты в режим "Сумма за оборот по блокам"). Стандартная программа - текущие рабочие значения команды; облегченная/интенсивная - оценочная вилка +-30% от стандартной, не отдельно подтвержденные цифры.</p>
           <label>
             Расчет защиты
             <select id="protectionMode">
               <option value="daily">Ставки руб./м2/день</option>
-              <option value="cycle">Сумма за оборот</option>
+              <option value="cycle">Сумма за оборот по блокам</option>
+              <option value="total">Итого за оборот на 1 га</option>
             </select>
           </label>
           <div id="protectionDaily">
-            <label>Химия + дезинфекция <input id="chemDaily" type="number" step="0.001" value="0.192" /></label>
-            <label>Биопрепараты <input id="bioDaily" type="number" step="0.001" value="0.18" /></label>
-            <label>Энтомофаги <input id="entoDaily" type="number" step="0.001" value="0.18" /></label>
+            <label>Химия + дезинфекция <input id="chemDaily" type="number" step="0.001" value="0.192"></label>
+            <label>Биопрепараты <input id="bioDaily" type="number" step="0.001" value="0.18"></label>
+            <label>Энтомофаги <input id="entoDaily" type="number" step="0.001" value="0.18"></label>
           </div>
           <div id="protectionCycle" class="hidden">
-            <label>Химия + дезинфекция за оборот <input id="chemCycle" type="number" step="1000" value="180000" /></label>
-            <label>Биопрепараты за оборот <input id="bioCycle" type="number" step="1000" value="160000" /></label>
-            <label>Энтомофаги за оборот <input id="entoCycle" type="number" step="1000" value="160000" /></label>
+            <label>Химия + дезинфекция за оборот на 1 га <input id="chemCycle" type="number" step="1000" value="180000"></label>
+            <label>Биопрепараты за оборот на 1 га <input id="bioCycle" type="number" step="1000" value="160000"></label>
+            <label>Энтомофаги за оборот на 1 га <input id="entoCycle" type="number" step="1000" value="160000"></label>
           </div>
+          <div id="protectionTotal" class="hidden">
+            <label>Итого защита за оборот на 1 га <input id="protectionTotalHa" type="number" step="1000" value="500000"></label>
+          </div>
+          <p class="metric compact">Итого защита в расчете: <strong id="protectionTotalLabel">507&nbsp;840 руб.</strong></p>
         </section>
 
-        <section class="panel">
-          <h2>Тара и нестандарт</h2>
+        <section class="panel advancedPanel">
+          <h2>Тара и плод</h2>
           <label>
-            Справочник тары
-            <select id="packPreset"></select>
+            Тип продукции
+            <select id="packPreset"><option value="cucumber-short">Огурец короткий: 7 кг, плод 110 г</option><option value="cucumber-medium">Огурец средний: 6 кг, плод 180 г</option><option value="cucumber-valigora">Огурец Валигора: 7 кг, плод 180 г</option><option value="manual">Ручной ввод</option></select>
           </label>
           <label>
             Вместимость тары, кг
-            <input id="packKg" type="number" step="0.1" value="7" />
+            <input id="packKg" type="number" step="0.1" value="7">
           </label>
           <label>
             Стоимость тары, руб./шт.
-            <input id="packPrice" type="number" step="1" value="35" />
+            <input id="packPrice" type="number" step="1" value="35">
           </label>
-          <div class="grid2">
-            <label>
-              Нестандарт А, %
-              <input id="offgradeA" type="number" step="0.5" value="5" />
-            </label>
-            <label>
-              Нестандарт Б, %
-              <input id="offgradeB" type="number" step="0.5" value="5" />
-            </label>
-          </div>
+          <label>
+            Средняя масса плода, г
+            <input id="fruitWeightG" type="number" min="1" step="1" value="180">
+          </label>
         </section>
 
-        <section class="panel">
+        <section class="panel advancedPanel">
           <h2>Прочие затраты</h2>
           <div class="grid2">
             <label>
               Газ, м3/м2/сут
-              <input id="gasUse" type="number" step="0.01" value="0.24" />
+              <input id="gasUse" type="number" step="0.01" value="0.24">
             </label>
             <label>
               Газ, руб./м3
-              <input id="gasPrice" type="number" step="0.1" value="12" />
+              <input id="gasPrice" type="number" step="0.1" value="9">
             </label>
           </div>
           <div class="grid2">
             <label>
               Сотрудников на га
-              <input id="staffPerHa" type="number" step="1" value="16" />
+              <input id="staffPerHa" type="number" step="1" value="16">
             </label>
             <label>
               Час труда, руб.
-              <input id="laborHourPrice" type="number" step="10" value="300" />
+              <input id="laborHourPrice" type="number" step="10" value="300">
             </label>
           </div>
           <div class="grid2">
             <label>
               Растений на м2
-              <input id="plantDensity" type="number" step="0.1" value="2.9" />
+              <input id="plantDensity" type="number" step="0.1" value="2.9">
             </label>
             <label>
-              Семена, руб./шт.
-              <input id="seedPrice" type="number" step="1" value="12" />
+              Справочник семян
+              <select id="seedPreset"><option value="cucumber-meva">Огурец Мева: 740 евро/1000 шт = 74 руб./шт. без НДС</option><option value="tomato-round">Томат среднеплодный круглый: 850 евро/1000 шт = 85 руб./шт. без НДС</option><option value="tomato-plamola">Томат Пламола: 1500 евро/1000 шт = 150 руб./шт. без НДС</option><option value="tomato-cherry">Томат черри: до 2500 евро/1000 шт = до 250 руб./шт. без НДС</option><option value="manual">Ручной ввод</option></select>
             </label>
           </div>
+          <label>
+            Семена, руб./шт. без НДС
+            <input id="seedPrice" type="number" step="1" value="74">
+          </label>
+          <p class="hint">Справочные цены пересчитаны по курсу 100 руб./евро и указаны без НДС.</p>
         </section>
       </aside>
 
@@ -749,20 +1213,24 @@ td input {
           <div>
             <p class="eyebrow">Коммерческий вывод</p>
             <h2 id="decisionTitle">Субстрат А окупается</h2>
-            <p id="decisionText">Заполните параметры, чтобы увидеть результат.</p>
+            <p id="decisionText">По введенным данным субстрат А показывает положительный финансовый эффект относительно субстрата Б: +734&nbsp;556 руб.. Расчетная точка окупаемости разницы в стоимости субстрата - 0,19 кг/м2, или примерно 1,0 плодов/м2 и 0,36 плода на растение.</p>
           </div>
           <div class="kpis">
             <div>
               <span>Доп. прибыль</span>
-              <strong id="profitDelta">0</strong>
+              <strong id="profitDelta">734&nbsp;556 руб.</strong>
             </div>
             <div>
               <span>Точка окупаемости</span>
-              <strong id="breakEven">0 кг/м2</strong>
+              <strong id="breakEven">0,19 кг/м2</strong>
             </div>
             <div>
-              <span>Средняя цена А / Б</span>
-              <strong id="avgPrices">0 / 0</strong>
+              <span>Окупаемость в плодах</span>
+              <strong id="breakEvenFruit">1,0 шт./м2</strong>
+            </div>
+            <div>
+              <span>Средневзвешенная цена реализации, А / Б</span>
+              <strong id="avgPrices">116 / 116 руб.</strong>
             </div>
             <div>
               <span>Ранний старт</span>
@@ -771,59 +1239,277 @@ td input {
           </div>
         </section>
 
-        <section class="panel">
+        <section class="panel" id="periodTablePanel">
           <div class="sectionHead">
             <div>
               <h2>Урожай и цены реализации</h2>
               <p>Выберите детализацию: средняя за оборот, месяцы или недели. Средняя цена считается по выручке, а не простым средним.</p>
             </div>
-            <button id="fillCurve" class="ghostButton">Автозаполнить кривую</button>
+            <button id="fillCurve" class="ghostButton">Пересчитать кривую по параметрам</button>
           </div>
+
+          <div class="grid2 inlineSettings">
+            <label>
+              Справочник сезона
+              <select id="seasonPreset"></select>
+            </label>
+            <div>
+              <button id="applySeason" type="button" class="ghostButton">Применить множитель к ценам в таблице</button>
+            </div>
+          </div>
+          <p class="hint"><span class="srcTag srcTag--estimate">? оценка</span>Множитель домножает уже введенные цены стандарта/нестандарта в таблице ниже (урожай не меняет). Коэффициент зависит от культуры: у огурца летний провал глубже (x0.3, опт ~18-40 руб/кг летом против 80-190 зимой), у томата мягче (x0.65) - импорт из Турции/Азербайджана сглаживает сезонность. Ориентир по открытым источникам 2025-2026, не измеренный ряд - сверяйте с фактическими контрактами.</p>
 
           <div id="simpleInputs" class="modeBlock hidden">
             <div class="grid4">
-              <label>Урожай А, кг/м2 <input id="simpleYieldA" type="number" step="0.1" value="20.4" /></label>
-              <label>Урожай Б, кг/м2 <input id="simpleYieldB" type="number" step="0.1" value="20" /></label>
-              <label>Цена стандарт, руб./кг <input id="simplePrice" type="number" step="1" value="130" /></label>
-              <label>Цена нестандарт, руб./кг <input id="simpleOffPrice" type="number" step="1" value="105" /></label>
+              <label>Урожай А, кг/м2 <input id="simpleYieldA" type="number" step="0.1" value="20.4"></label>
+              <label>Урожай Б, кг/м2 <input id="simpleYieldB" type="number" step="0.1" value="20"></label>
+              <label>Цена стандарт, руб./кг <input id="simplePrice" type="number" step="1" value="130"></label>
+              <label>Цена нестандарт, руб./кг <input id="simpleOffPrice" type="number" step="1" value="105"></label>
             </div>
           </div>
+          <div class="grid2 inlineSettings">
+            <label>
+              Нестандарт А, %
+              <input id="offgradeA" type="number" step="0.5" value="5">
+            </label>
+            <label>
+              Нестандарт Б, %
+              <input id="offgradeB" type="number" step="0.5" value="5">
+            </label>
+          </div>
 
-          <div id="periodTableWrap" class="tableWrap"></div>
+          <div id="periodTableWrap" class="tableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Неделя</th>
+          <th>Урожай А, кг/м2</th>
+          <th>Урожай Б, кг/м2</th>
+          <th>Цена стандарт, руб./кг</th>
+          <th>Цена нестандарт, руб./кг</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>Нед. 1 (05.01)</td>
+            <td><input data-row="0" data-field="yieldA" type="number" step="0.01" value="0"></td>
+            <td><input data-row="0" data-field="yieldB" type="number" step="0.01" value="0"></td>
+            <td><input data-row="0" data-field="price" type="number" step="1" value="190"></td>
+            <td><input data-row="0" data-field="offPrice" type="number" step="1" value="162"></td>
+          </tr>
+          <tr>
+            <td>Нед. 2 (12.01)</td>
+            <td><input data-row="1" data-field="yieldA" type="number" step="0.01" value="0"></td>
+            <td><input data-row="1" data-field="yieldB" type="number" step="0.01" value="0"></td>
+            <td><input data-row="1" data-field="price" type="number" step="1" value="190"></td>
+            <td><input data-row="1" data-field="offPrice" type="number" step="1" value="162"></td>
+          </tr>
+          <tr>
+            <td>Нед. 3 (19.01)</td>
+            <td><input data-row="2" data-field="yieldA" type="number" step="0.01" value="0"></td>
+            <td><input data-row="2" data-field="yieldB" type="number" step="0.01" value="0"></td>
+            <td><input data-row="2" data-field="price" type="number" step="1" value="190"></td>
+            <td><input data-row="2" data-field="offPrice" type="number" step="1" value="162"></td>
+          </tr>
+          <tr>
+            <td>Нед. 4 (26.01)</td>
+            <td><input data-row="3" data-field="yieldA" type="number" step="0.01" value="0"></td>
+            <td><input data-row="3" data-field="yieldB" type="number" step="0.01" value="0"></td>
+            <td><input data-row="3" data-field="price" type="number" step="1" value="190"></td>
+            <td><input data-row="3" data-field="offPrice" type="number" step="1" value="162"></td>
+          </tr>
+          <tr>
+            <td>Нед. 5 (02.02)</td>
+            <td><input data-row="4" data-field="yieldA" type="number" step="0.01" value="0.55"></td>
+            <td><input data-row="4" data-field="yieldB" type="number" step="0.01" value="0.52"></td>
+            <td><input data-row="4" data-field="price" type="number" step="1" value="150"></td>
+            <td><input data-row="4" data-field="offPrice" type="number" step="1" value="128"></td>
+          </tr>
+          <tr>
+            <td>Нед. 6 (09.02)</td>
+            <td><input data-row="5" data-field="yieldA" type="number" step="0.01" value="1.1"></td>
+            <td><input data-row="5" data-field="yieldB" type="number" step="0.01" value="1.04"></td>
+            <td><input data-row="5" data-field="price" type="number" step="1" value="150"></td>
+            <td><input data-row="5" data-field="offPrice" type="number" step="1" value="128"></td>
+          </tr>
+          <tr>
+            <td>Нед. 7 (16.02)</td>
+            <td><input data-row="6" data-field="yieldA" type="number" step="0.01" value="1.65"></td>
+            <td><input data-row="6" data-field="yieldB" type="number" step="0.01" value="1.56"></td>
+            <td><input data-row="6" data-field="price" type="number" step="1" value="150"></td>
+            <td><input data-row="6" data-field="offPrice" type="number" step="1" value="128"></td>
+          </tr>
+          <tr>
+            <td>Нед. 8 (23.02)</td>
+            <td><input data-row="7" data-field="yieldA" type="number" step="0.01" value="2.2"></td>
+            <td><input data-row="7" data-field="yieldB" type="number" step="0.01" value="2.08"></td>
+            <td><input data-row="7" data-field="price" type="number" step="1" value="150"></td>
+            <td><input data-row="7" data-field="offPrice" type="number" step="1" value="128"></td>
+          </tr>
+          <tr>
+            <td>Нед. 9 (02.03)</td>
+            <td><input data-row="8" data-field="yieldA" type="number" step="0.01" value="2.2"></td>
+            <td><input data-row="8" data-field="yieldB" type="number" step="0.01" value="2.08"></td>
+            <td><input data-row="8" data-field="price" type="number" step="1" value="110"></td>
+            <td><input data-row="8" data-field="offPrice" type="number" step="1" value="94"></td>
+          </tr>
+          <tr>
+            <td>Нед. 10 (09.03)</td>
+            <td><input data-row="9" data-field="yieldA" type="number" step="0.01" value="2.2"></td>
+            <td><input data-row="9" data-field="yieldB" type="number" step="0.01" value="2.08"></td>
+            <td><input data-row="9" data-field="price" type="number" step="1" value="110"></td>
+            <td><input data-row="9" data-field="offPrice" type="number" step="1" value="94"></td>
+          </tr>
+          <tr>
+            <td>Нед. 11 (16.03)</td>
+            <td><input data-row="10" data-field="yieldA" type="number" step="0.01" value="1.88"></td>
+            <td><input data-row="10" data-field="yieldB" type="number" step="0.01" value="1.78"></td>
+            <td><input data-row="10" data-field="price" type="number" step="1" value="110"></td>
+            <td><input data-row="10" data-field="offPrice" type="number" step="1" value="94"></td>
+          </tr>
+          <tr>
+            <td>Нед. 12 (23.03)</td>
+            <td><input data-row="11" data-field="yieldA" type="number" step="0.01" value="1.53"></td>
+            <td><input data-row="11" data-field="yieldB" type="number" step="0.01" value="1.45"></td>
+            <td><input data-row="11" data-field="price" type="number" step="1" value="80"></td>
+            <td><input data-row="11" data-field="offPrice" type="number" step="1" value="68"></td>
+          </tr>
+          <tr>
+            <td>Нед. 13 (30.03)</td>
+            <td><input data-row="12" data-field="yieldA" type="number" step="0.01" value="1.21"></td>
+            <td><input data-row="12" data-field="yieldB" type="number" step="0.01" value="1.14"></td>
+            <td><input data-row="12" data-field="price" type="number" step="1" value="80"></td>
+            <td><input data-row="12" data-field="offPrice" type="number" step="1" value="68"></td>
+          </tr>
+          <tr>
+            <td>Нед. 14 (06.04)</td>
+            <td><input data-row="13" data-field="yieldA" type="number" step="0.01" value="1.21"></td>
+            <td><input data-row="13" data-field="yieldB" type="number" step="0.01" value="1.14"></td>
+            <td><input data-row="13" data-field="price" type="number" step="1" value="80"></td>
+            <td><input data-row="13" data-field="offPrice" type="number" step="1" value="68"></td>
+          </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Итого</th>
+          <th id="periodTotalYieldA">15,73 кг/м2</th>
+          <th id="periodTotalYieldB">14,87 кг/м2</th>
+          <th id="periodAvgPrice">116,5 руб./кг</th>
+          <th id="periodAvgOffPrice">99,0 руб./кг</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
         </section>
 
         <section class="chartsGrid">
           <div class="panel">
-            <h2>Мост прибыли</h2>
-            <div id="waterfall" class="chart"></div>
+            <h2>Вклад факторов в результат</h2>
+            <div id="waterfall" class="chart">
+        <div class="barRow">
+          <div class="barLabel">Доп. выручка</div>
+          <div class="barTrack"><div class="barFill good" style="width:100%"></div></div>
+          <div class="barValue">992&nbsp;500 руб.</div>
+        </div>
+        <div class="barRow">
+          <div class="barLabel">Переплата за мат</div>
+          <div class="barTrack"><div class="barFill bad" style="width:31.27858942065491%"></div></div>
+          <div class="barValue">-310&nbsp;440 руб.</div>
+        </div>
+        <div class="barRow">
+          <div class="barLabel">Экономия удобрений</div>
+          <div class="barTrack"><div class="barFill good" style="width:9.597927311982781%"></div></div>
+          <div class="barValue">95&nbsp;259 руб.</div>
+        </div>
+        <div class="barRow">
+          <div class="barLabel">Экономия воды</div>
+          <div class="barTrack"><div class="barFill good" style="width:2%"></div></div>
+          <div class="barValue">237 руб.</div>
+        </div>
+        <div class="barRow">
+          <div class="barLabel">Доп. тара</div>
+          <div class="barTrack"><div class="barFill bad" style="width:4.332493702770781%"></div></div>
+          <div class="barValue">-43&nbsp;000 руб.</div>
+        </div>
+        <div class="barRow">
+          <div class="barLabel">Итог</div>
+          <div class="barTrack"><div class="barFill good" style="width:74.01068010075566%"></div></div>
+          <div class="barValue">734&nbsp;556 руб.</div>
+        </div></div>
           </div>
-          <div class="panel">
-            <h2>А vs Б по периодам</h2>
-            <div id="periodChart" class="chart"></div>
+          <div class="panel" id="periodChartPanel">
+            <h2>Выручка А vs Б по периодам, руб. без НДС</h2>
+            <div id="periodChart" class="chart">
+    <div class="lineChart">
+      <svg viewBox="0 0 720 300" role="img" aria-label="Выручка по периодам">
+        <text x="16" y="150" transform="rotate(-90 16 150)" text-anchor="middle" font-size="11" fill="#66726d">руб. / период</text>
+        <line x1="64" y1="268" x2="688" y2="268" stroke="#edf1ec"></line><text x="56" y="272" text-anchor="end" font-size="10" fill="#66726d">0</text><line x1="64" y1="209" x2="688" y2="209" stroke="#edf1ec"></line><text x="56" y="213" text-anchor="end" font-size="10" fill="#66726d">1,0 млн</text><line x1="64" y1="150" x2="688" y2="150" stroke="#edf1ec"></line><text x="56" y="154" text-anchor="end" font-size="10" fill="#66726d">2,0 млн</text><line x1="64" y1="91" x2="688" y2="91" stroke="#edf1ec"></line><text x="56" y="95" text-anchor="end" font-size="10" fill="#66726d">3,0 млн</text><line x1="64" y1="32" x2="688" y2="32" stroke="#edf1ec"></line><text x="56" y="36" text-anchor="end" font-size="10" fill="#66726d">4,0 млн</text>
+        <line x1="64" y1="268" x2="688" y2="268" stroke="#cbd5ce"></line>
+        <line x1="64" y1="32" x2="64" y2="268" stroke="#cbd5ce"></line>
+        <polyline points="64,268 112,268 160,268 208,268 256,219.6900625 304,171.380125 352,123.0701875 400,74.76024999999998 448,126.29085 496,126.29085 544,146.90309 592,196.32562000000001 640,211.31634 688,211.31634" fill="none" stroke="#1f8a5b" stroke-width="3"></polyline>
+        <polyline points="64,268 112,268 160,268 208,268 256,222.32515 304,176.65030000000002 352,130.97545 400,85.3006 448,134.02043999999998 496,134.02043999999998 544,153.34441500000003 592,200.07330000000002 640,214.59556 688,214.59556" fill="none" stroke="#2f6f92" stroke-width="3"></polyline>
+        <text x="64" y="293" text-anchor="middle" font-size="10" fill="#66726d">1 (05.01)</text><text x="160" y="293" text-anchor="middle" font-size="10" fill="#66726d">3 (19.01)</text><text x="256" y="293" text-anchor="middle" font-size="10" fill="#66726d">5 (02.02)</text><text x="352" y="293" text-anchor="middle" font-size="10" fill="#66726d">7 (16.02)</text><text x="448" y="293" text-anchor="middle" font-size="10" fill="#66726d">9 (02.03)</text><text x="544" y="293" text-anchor="middle" font-size="10" fill="#66726d">11 (16.03)</text><text x="640" y="293" text-anchor="middle" font-size="10" fill="#66726d">13 (30.03)</text>
+      </svg>
+      <div class="legend"><span>Субстрат А</span><span>Субстрат Б</span></div>
+    </div></div>
           </div>
         </section>
 
-        <section class="panel">
+        <section class="panel" id="heatmapPanel">
           <div class="sectionHead">
             <div>
-              <h2>Матрица прибыльности</h2>
-              <p>Дополнительная прибыль А против Б при разных ценах и прибавке урожая. Зеленая зона показывает, где переплата за субстрат окупается.</p>
+              <h2>Проверка окупаемости прибавки урожая</h2>
+              <p>Таблица показывает, при какой цене реализации и какой прибавке урожайности более дорогой субстрат А начинает приносить дополнительную прибыль по сравнению с субстратом Б. Цена — это цена продажи продукции, руб./кг без НДС.</p>
             </div>
           </div>
-          <div id="heatmap" class="heatmap"></div>
+          <div id="heatmap" class="heatmap">
+    <table>
+      <thead><tr><th>Прибавка / Цена</th><th>50 руб.</th><th>80 руб.</th><th>110 руб.</th><th>130 руб.</th><th>150 руб.</th><th>200 руб.</th><th>270 руб.</th></tr></thead>
+      <tbody>
+        <tr><th>+0,0 кг/м2</th><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.2866666666666667)">-214&nbsp;944 руб.</td></tr><tr><th>+0,2 кг/м2</th><td class="heatCell" style="background:rgba(186,63,58,0.20912709046697414)">-114&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(186,63,58,0.16260334474715865)">-54&nbsp;944 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.14407721701156315)">5&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.17633368071063524)">45&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.20859014440970733)">85&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.2892313036573876)">185&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.40212892660413985)">325&nbsp;056 руб.</td></tr><tr><th>+0,5 кг/м2</th><td class="heatCell" style="background:rgba(31,138,91,0.16826956478586721)">35&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.2892313036573876)">185&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.41019304252890787)">335&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.4908342017765881)">435&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.5714753610242683)">535&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;135&nbsp;056 руб.</td></tr><tr><th>+1,0 кг/м2</th><td class="heatCell" style="background:rgba(31,138,91,0.36987246290506776)">285&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.6117959406481084)">585&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">885&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;085&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;285&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">2&nbsp;485&nbsp;056 руб.</td></tr><tr><th>+1,5 кг/м2</th><td class="heatCell" style="background:rgba(31,138,91,0.5714753610242683)">535&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">985&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;435&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;735&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">2&nbsp;035&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">2&nbsp;785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">3&nbsp;835&nbsp;056 руб.</td></tr><tr><th>+2,0 кг/м2</th><td class="heatCell" style="background:rgba(31,138,91,0.66)">785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;385&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;985&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">2&nbsp;385&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">2&nbsp;785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">3&nbsp;785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">5&nbsp;185&nbsp;056 руб.</td></tr><tr><th>+3,0 кг/м2</th><td class="heatCell" style="background:rgba(31,138,91,0.66)">1&nbsp;285&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">2&nbsp;185&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">3&nbsp;085&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">3&nbsp;685&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">4&nbsp;285&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">5&nbsp;785&nbsp;056 руб.</td><td class="heatCell" style="background:rgba(31,138,91,0.66)">7&nbsp;885&nbsp;056 руб.</td></tr>
+      </tbody>
+    </table>
+    <p class="hint">Зеленые ячейки - субстрат А окупается. Красные - прибавки урожая недостаточно. База Б: 14,9 кг/м2.</p></div>
         </section>
 
         <section class="panel">
           <h2>Финальная таблица</h2>
-          <div id="summaryTable" class="summaryTable"></div>
+          <div id="summaryTable" class="summaryTable">
+    <h3>Итог расчета за оборот, руб. без НДС</h3>
+    <table class="summaryTable__main">
+      <thead><tr><th>Показатель</th><th>Субстрат А</th><th>Субстрат Б</th><th>Дельта А-Б</th></tr></thead>
+      <tbody><tr><td>Выручка от реализации</td><td><strong>18&nbsp;180&nbsp;615 руб.</strong></td><td><strong>17&nbsp;188&nbsp;115 руб.</strong></td><td><strong>992&nbsp;500 руб.</strong></td></tr><tr><td>Субстрат</td><td><strong>787&nbsp;800 руб.</strong></td><td><strong>477&nbsp;360 руб.</strong></td><td><strong>310&nbsp;440 руб.</strong></td></tr><tr><td>Вода</td><td><strong>3&nbsp;312 руб.</strong></td><td><strong>3&nbsp;549 руб.</strong></td><td><strong>-237 руб.</strong></td></tr><tr><td>Удобрения / рабочий раствор</td><td><strong>1&nbsp;333&nbsp;632 руб.</strong></td><td><strong>1&nbsp;428&nbsp;891 руб.</strong></td><td><strong>-95&nbsp;259 руб.</strong></td></tr><tr><td>Электроэнергия</td><td><strong>6&nbsp;859&nbsp;520 руб.</strong></td><td><strong>6&nbsp;859&nbsp;520 руб.</strong></td><td><strong>0 руб.</strong></td></tr><tr><td>Газ / тепло</td><td><strong>2&nbsp;649&nbsp;600 руб.</strong></td><td><strong>2&nbsp;649&nbsp;600 руб.</strong></td><td><strong>0 руб.</strong></td></tr><tr><td>Защита растений</td><td><strong>507&nbsp;840 руб.</strong></td><td><strong>507&nbsp;840 руб.</strong></td><td><strong>0 руб.</strong></td></tr><tr><td>Труд</td><td><strong>3&nbsp;532&nbsp;800 руб.</strong></td><td><strong>3&nbsp;532&nbsp;800 руб.</strong></td><td><strong>0 руб.</strong></td></tr><tr><td>Семена</td><td><strong>2&nbsp;146&nbsp;000 руб.</strong></td><td><strong>2&nbsp;146&nbsp;000 руб.</strong></td><td><strong>0 руб.</strong></td></tr><tr><td>Тара</td><td><strong>786&nbsp;500 руб.</strong></td><td><strong>743&nbsp;500 руб.</strong></td><td><strong>43&nbsp;000 руб.</strong></td></tr><tr><td>Итого затраты</td><td><strong>18&nbsp;607&nbsp;004 руб.</strong></td><td><strong>18&nbsp;349&nbsp;060 руб.</strong></td><td><strong>257&nbsp;944 руб.</strong></td></tr><tr><td>Финансовый результат</td><td><strong>-426&nbsp;389 руб.</strong></td><td><strong>-1&nbsp;160&nbsp;945 руб.</strong></td><td><strong>734&nbsp;556 руб.</strong></td></tr><tr><td>Дополнительный финансовый эффект А</td><td><strong>734&nbsp;556 руб.</strong></td><td><strong>-</strong></td><td><strong>734&nbsp;556 руб.</strong></td></tr></tbody>
+    </table>
+    <h3>Показатели, использованные в расчете</h3>
+    <table class="summaryTable__assumptions">
+      <thead><tr><th>Показатель</th><th>Субстрат А</th><th>Субстрат Б</th><th>Разница / примечание</th></tr></thead>
+      <tbody><tr><td>Урожайность</td><td><strong>15,73 кг/м2</strong></td><td><strong>14,87 кг/м2</strong></td><td><strong>0,86 кг/м2</strong></td></tr><tr><td>Средневзвешенная цена реализации</td><td><strong>115,6 руб./кг</strong></td><td><strong>115,6 руб./кг</strong></td><td><strong>0,0 руб./кг</strong></td></tr><tr><td>Цена стандарта</td><td><strong>116,5 руб./кг</strong></td><td><strong>116,5 руб./кг</strong></td><td><strong>0,0 руб./кг</strong></td></tr><tr><td>Цена нестандарта</td><td><strong>99,0 руб./кг</strong></td><td><strong>99,0 руб./кг</strong></td><td><strong>0,0 руб./кг</strong></td></tr><tr><td>Нестандарт</td><td><strong>5,0%</strong></td><td><strong>5,0%</strong></td><td><strong>0,0 п.п.</strong></td></tr><tr><td>Масса плода</td><td><strong>180 г</strong></td><td><strong>180 г</strong></td><td><strong>используется для окупаемости в плодах</strong></td></tr><tr><td>Окупаемость в плодах</td><td><strong>1,0 шт./м2</strong></td><td><strong>0,36 шт./растение</strong></td><td><strong>0,19 кг/м2</strong></td></tr><tr><td>Дренаж</td><td><strong>25%</strong></td><td><strong>30%</strong></td><td><strong>-5 п.п.</strong></td></tr><tr><td>Оборот</td><td><strong>05.01.2026 - 06.04.2026</strong></td><td><strong>05.01.2026 - 06.04.2026</strong></td><td><strong>92 дней</strong></td></tr><tr><td>Площадь</td><td><strong>1,00 га</strong></td><td><strong>1,00 га</strong></td><td><strong>10&nbsp;000 м2</strong></td></tr><tr><td>Цена электроэнергии в расчете</td><td><strong>3,20 руб./кВтч</strong></td><td><strong>3,20 руб./кВтч</strong></td><td><strong>0</strong></td></tr><tr><td>Защита растений</td><td><strong>507&nbsp;840 руб.</strong></td><td><strong>507&nbsp;840 руб.</strong></td><td><strong>ставки руб./м2/день</strong></td></tr><tr><td>Тип дренажа</td><td><strong>Открытый</strong></td><td><strong>Открытый</strong></td><td><strong>экономия учтена</strong></td></tr></tbody>
+    </table></div>
         </section>
       </section>
     </main>
+
+    <footer class="footnotes">
+      <p id="vatNote" class="hint">Расчет прибыли ведется без НДС. Денежные поля ниже сейчас трактуются как цены без НДС.</p>
+      <p class="hint">Ставка оплаты труда (руб./час) не пересчитывается по ставке НДС даже в режиме «С НДС, пересчитать в расчет без НДС» — оплата труда НДС не облагается, поэтому это поле всегда трактуется как чистая сумма.</p>
+    </footer>
 
     <script>const state = {
   crop: "cucumber",
   revenueMode: "weekly",
   rows: [],
+  rowsByMode: {
+    weekly: [],
+    monthly: [],
+  },
+  lastCycleEdit: "days",
+  lastSplitCyclePair: "A",
+  harvestAuto: true,
+  periodPricesEdited: false,
+  lastVatMode: "net",
+  hybrid: "cucumber-meva",
+  periodDataEditedByMode: { weekly: false, monthly: false },
 };
 
 const cropDefaults = {
@@ -839,14 +1525,18 @@ const cropDefaults = {
     weekCount: 14,
     startA: 4,
     startB: 5,
+    harvestOffsetDays: 28,
     peakYieldA: 2.2,
     peakYieldB: 2.08,
     pack: "cucumber-valigora",
+    fruitWeightG: 180,
     offgradeA: 5,
     offgradeB: 5,
     staffPerHa: 16,
     plantDensity: 2.9,
-    seedPrice: 12,
+    seedPrice: 74,
+    seedPreset: "cucumber-meva",
+    defaultHybrid: "cucumber-meva",
   },
   tomato: {
     cycleDays: 330,
@@ -860,42 +1550,203 @@ const cropDefaults = {
     weekCount: 48,
     startA: 9,
     startB: 10,
+    harvestOffsetDays: 63,
     peakYieldA: 1.8,
     peakYieldB: 1.75,
     pack: "tomato-plum",
+    fruitWeightG: 100,
     offgradeA: 6,
     offgradeB: 6,
     staffPerHa: 12,
     plantDensity: 3.2,
-    seedPrice: 40,
+    seedPrice: 85,
+    seedPreset: "tomato-round",
+    defaultHybrid: "tomato-round",
   },
 };
 
+// Профили гибридов поверх cropDefaults. Переопределяют только агрономические поля
+// (форма кривой, сроки, вес плода, нестандарт, густота, семена) - справочники цен на мат,
+// труд и энергию гибрид не трогает, это операционные параметры теплицы, а не сорта.
+// Мева F1 - подтвержденный гибрид Rijk Zwaan (плод 190-240 г, урожайность по данным
+// розничных поставщиков ~20.7-26.3 кг/м2 за оборот - это НЕ официальный каталог RZ,
+// а ориентир). Пламола F1 - гибрид существует (официальная страница Rijk Zwaan), но
+// агрономические цифры в открытом доступе не нашлись - значения оставлены как средние
+// по томату, отмечено в note. Остальные два - типовые ориентиры по классу плода, не
+// привязаны к конкретному сорту.
+const hybridPresets = {
+  "cucumber-meva": {
+    crop: "cucumber",
+    label: "Огурец Мева F1 (Rijk Zwaan)",
+    cycleDays: 92,
+    harvestOffsetDays: 28,
+    weekCount: 14,
+    startA: 4,
+    startB: 5,
+    peakYieldA: 2.2,
+    peakYieldB: 2.08,
+    fruitWeightG: 210,
+    offgradeA: 5,
+    offgradeB: 5,
+    plantDensity: 2.9,
+    seedPreset: "cucumber-meva",
+    confidence: "partial",
+    note: "Частично подтверждено: плод 190-240 г, ориентир по урожайности ~20.7-26.3 кг/м2 за оборот (данные розничного поставщика семян, не каталог Rijk Zwaan). Кривая по неделям и сроки - расчетные, скорректируйте под свои данные.",
+  },
+  "tomato-round": {
+    crop: "tomato",
+    label: "Томат среднеплодный круглый",
+    cycleDays: 330,
+    harvestOffsetDays: 63,
+    weekCount: 48,
+    startA: 9,
+    startB: 10,
+    peakYieldA: 1.8,
+    peakYieldB: 1.75,
+    fruitWeightG: 160,
+    offgradeA: 6,
+    offgradeB: 6,
+    plantDensity: 3.2,
+    seedPreset: "tomato-round",
+    confidence: "estimate",
+    note: "Ориентировочно: конкретный гибрид не указан, значения равны средним по томату - скорректируйте под свой сорт.",
+  },
+  "tomato-plamola": {
+    crop: "tomato",
+    label: "Томат Пламола F1 (Rijk Zwaan)",
+    cycleDays: 330,
+    harvestOffsetDays: 63,
+    weekCount: 48,
+    startA: 9,
+    startB: 10,
+    peakYieldA: 1.8,
+    peakYieldB: 1.75,
+    fruitWeightG: 100,
+    offgradeA: 6,
+    offgradeB: 6,
+    plantDensity: 3.2,
+    seedPreset: "tomato-plamola",
+    confidence: "partial",
+    note: "Гибрид подтвержден (есть официальная страница Rijk Zwaan), но урожайность/сроки в открытом доступе не найдены - использованы средние по томату, скорректируйте под свои данные.",
+  },
+  "tomato-cherry": {
+    crop: "tomato",
+    label: "Томат черри",
+    cycleDays: 330,
+    harvestOffsetDays: 58,
+    weekCount: 48,
+    startA: 8,
+    startB: 9,
+    peakYieldA: 1.3,
+    peakYieldB: 1.25,
+    fruitWeightG: 20,
+    offgradeA: 8,
+    offgradeB: 8,
+    plantDensity: 3.6,
+    seedPreset: "tomato-cherry",
+    confidence: "estimate",
+    note: "Типовой ориентир для черри-типа: обычно ниже кг/м2 и выше % нестандарта из-за растрескивания, чем у крупноплодных сортов, но выше цена за кг. Не привязано к конкретному гибриду.",
+  },
+  manual: { crop: "all", label: "Ручной ввод / другой гибрид", seedPreset: "manual", note: "" },
+};
+
 const packPresets = {
-  "cucumber-valigora": { crop: "cucumber", label: "Огурец Валигора: 7 кг", kg: 7 },
-  "cucumber-standard": { crop: "cucumber", label: "Огурец стандарт: 6 кг", kg: 6 },
-  "tomato-plum": { crop: "tomato", label: "Томат сливка: 6 кг", kg: 6 },
-  "tomato-round": { crop: "tomato", label: "Томат круглый: 7 кг", kg: 7 },
-  manual: { crop: "all", label: "Ручной ввод", kg: 7 },
+  "cucumber-short": { crop: "cucumber", label: "Огурец короткий: 7 кг, плод 110 г", kg: 7, fruitWeightG: 110 },
+  "cucumber-medium": { crop: "cucumber", label: "Огурец средний: 6 кг, плод 180 г", kg: 6, fruitWeightG: 180 },
+  "cucumber-valigora": { crop: "cucumber", label: "Огурец Валигора: 7 кг, плод 180 г", kg: 7, fruitWeightG: 180 },
+  "tomato-beef": { crop: "tomato", label: "Томат крупный / биф: 6 кг, плод 250 г", kg: 6, fruitWeightG: 250 },
+  "tomato-round": { crop: "tomato", label: "Томат средний: 7 кг, плод 160 г", kg: 7, fruitWeightG: 160 },
+  "tomato-plum": { crop: "tomato", label: "Томат сливка: 6 кг, плод 100 г", kg: 6, fruitWeightG: 100 },
+  "tomato-cherry": { crop: "tomato", label: "Томат черри: 3 кг, плод 20 г", kg: 3, fruitWeightG: 20 },
+  manual: { crop: "all", label: "Ручной ввод", kg: 7, fruitWeightG: 100 },
+};
+
+const seedPresets = {
+  "cucumber-meva": { crop: "cucumber", label: "Огурец Мева: 740 евро/1000 шт = 74 руб./шт. без НДС", price: 74 },
+  "tomato-round": { crop: "tomato", label: "Томат среднеплодный круглый: 850 евро/1000 шт = 85 руб./шт. без НДС", price: 85 },
+  "tomato-plamola": { crop: "tomato", label: "Томат Пламола: 1500 евро/1000 шт = 150 руб./шт. без НДС", price: 150 },
+  "tomato-cherry": { crop: "tomato", label: "Томат черри: до 2500 евро/1000 шт = до 250 руб./шт. без НДС", price: 250 },
+  manual: { crop: "all", label: "Ручной ввод", price: null },
 };
 
 const waterPresets = {
-  spb: { label: "Санкт-Петербург", radiation: 1.5, waterUse: 3.0 },
-  central: { label: "Средняя полоса", radiation: 2.0, waterUse: 3.6 },
-  south: { label: "Юг", radiation: 2.7, waterUse: 4.6 },
-  manual: { label: "Ручной ввод", radiation: null, waterUse: null },
+  spb: { label: "Санкт-Петербург", radiation: 1.5, waterCoef: 184 },
+  central: { label: "Средняя полоса", radiation: 2.0, waterCoef: 165.6 },
+  south: { label: "Юг", radiation: 2.7, waterCoef: 156.7 },
+  manual: { label: "Ручной ввод", radiation: null, waterCoef: null },
+};
+
+// Ориентиры по открытым источникам (регулируемый тариф на газ для пром. потребителей
+// ~8.5-9.5 руб/м3 на конец 2026, розничная сеть для среднего коммерческого потребителя
+// ~8-11 руб/кВтч, себестоимость собственной генерации ГПУ ~2.5-4 руб/кВтч по расчетам
+// поставщиков когенерационных установок). Это не тариф конкретного контракта -
+// проверяйте по своему договору.
+const energyPresets = {
+  "gpu-typical": { label: "ГПУ, типовая себестоимость (~3.2 руб./кВтч)", mode: "gpu", gpuPrice: 3.2, gridPrice: 9, gasPrice: 9 },
+  "grid-typical": { label: "Сеть, средний коммерческий тариф РФ (~9 руб./кВтч)", mode: "grid", gpuPrice: 3.2, gridPrice: 9, gasPrice: 9 },
+  "mix-70-30": { label: "Микс 70% ГПУ / 30% сеть", mode: "mix", gpuPrice: 3.2, gridPrice: 9, gasPrice: 9, gpuShare: 70 },
+  manual: { label: "Ручной ввод", mode: null },
+};
+
+// Текущие значения защиты (chemCycle/bioCycle/entoCycle 180000/160000/160000 руб./га за
+// оборот) - это уже действующие ориентиры команды, оставлены как "стандартная программа".
+// Легкая/интенсивная программы - оценочная вилка +-30%, не отдельно подтвержденные цифры,
+// корректируйте под факт.
+const protectionPresets = {
+  standard: { label: "Стандартная программа (текущие значения)", chemCycle: 180000, bioCycle: 160000, entoCycle: 160000 },
+  light: { label: "Облегченная программа (ориентировочно, -30%)", chemCycle: 126000, bioCycle: 112000, entoCycle: 112000 },
+  intensive: { label: "Интенсивная программа (ориентировочно, +30%)", chemCycle: 234000, bioCycle: 208000, entoCycle: 208000 },
+  manual: { label: "Ручной ввод", chemCycle: null, bioCycle: null, entoCycle: null },
+};
+
+// Множитель к уже введенным ценам таблицы периодов (не трогает урожай), коэффициент
+// зависит от культуры - у огурца провал глубже, чем у томата (см. seasonalWeekPrice для
+// подробного разбора источников). Огурец: летние опт-цены ~18-40 руб/кг против зимних
+// 80-190 в кривой -> ориентировочно x0.3. Томат: сезонный размах заметно меньше из-за
+// ~20% доли импорта (Турция/Азербайджан), который сглаживает и зиму, и лето -> x0.65.
+// Это не измеренный ряд, а оценка формы - проверяйте по своим контрактам.
+const seasonPresets = {
+  "winter-spring": { label: "Зимне-весенний оборот (текущие цены)", factorByCrop: { cucumber: 1, tomato: 1 } },
+  "summer-autumn": {
+    label: "Летне-осенний оборот (цены ниже)",
+    factorByCrop: { cucumber: 0.3, tomato: 0.65 },
+  },
+  manual: { label: "Не менять цены", factorByCrop: { cucumber: 1, tomato: 1 } },
+};
+
+// Диапазоны дренажа по типу системы - общеотраслевые ориентиры для матового выращивания
+// на минвате, не привязаны к конкретному объекту.
+const drainPresets = {
+  classic: { label: "Открытый, классический (25-30%)", drainAPct: 25, drainDelta: 5 },
+  optimized: { label: "Открытый, оптимизированный (15-20%)", drainAPct: 17, drainDelta: 3 },
+  recirculated: { label: "Закрытый/рециркуляция (эффективный дренаж ниже, экономия по нему не считается)", drainAPct: 10, drainDelta: 0 },
+  manual: { label: "Ручной ввод", drainAPct: null, drainDelta: null },
 };
 
 const months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
 
 const $ = (id) => document.getElementById(id);
+const MS_DAY = 86400000;
 const inputIds = [
+  "hybridPreset",
+  "energyPreset",
+  "protectionPreset",
+  "drainPreset",
   "revenueMode",
-  "area",
+  "areaHa",
   "cycleDays",
+  "cycleTimingMode",
   "cycleStart",
+  "cycleEnd",
+  "cycleStartA",
+  "cycleEndA",
+  "cycleStartB",
+  "cycleEndB",
+  "harvestTimingMode",
   "harvestStartA",
   "harvestStartB",
+  "vatMode",
+  "vatRate",
   "energyMode",
   "gpuPrice",
   "gridPrice",
@@ -906,10 +1757,15 @@ const inputIds = [
   "matsPerHa",
   "wasteA",
   "wasteB",
+  "drainInputMode",
   "drainA",
   "drainDelta",
+  "drainB",
   "drainMode",
+  "waterCalcMode",
   "waterPreset",
+  "radiationKj",
+  "waterCoef",
   "waterUse",
   "waterPrice",
   "fertilizerPrice",
@@ -920,9 +1776,12 @@ const inputIds = [
   "chemCycle",
   "bioCycle",
   "entoCycle",
+  "protectionTotalHa",
   "packPreset",
   "packKg",
   "packPrice",
+  "fruitWeightG",
+  "seedPreset",
   "offgradeA",
   "offgradeB",
   "gasUse",
@@ -941,96 +1800,732 @@ function n(id) {
   return Number($(id).value) || 0;
 }
 
+function netValue(value) {
+  const vatFactor = $("vatMode") && $("vatMode").value === "gross" ? 1 + n("vatRate") / 100 : 1;
+  return (Number(value) || 0) / Math.max(0.01, vatFactor);
+}
+
+function m(id) {
+  return netValue(n(id));
+}
+
+function getAreaM2() {
+  return n("areaHa") * 10000;
+}
+
 function money(value) {
-  return new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(value) + " руб.";
+  return new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(cleanZero(value)) + " руб.";
 }
 
 function number(value, digits = 1) {
   return new Intl.NumberFormat("ru-RU", {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
-  }).format(value);
+  }).format(cleanZero(value, digits));
+}
+
+// Единый визуальный маркер доверия к допущению: "confirmed" - подтверждено открытыми
+// источниками, "partial" - гибрид/факт подтвержден, но не все цифры, "estimate" -
+// ориентировочная оценка/типовой ориентир. Раньше это было видно только из текста
+// подсказок в отдельных местах - теперь один и тот же значок используется везде.
+function sourceBadgeHtml(level) {
+  if (level === "confirmed") return '<span class="srcTag srcTag--confirmed">✓ подтверждено</span>';
+  if (level === "partial") return '<span class="srcTag srcTag--partial">~ частично подтверждено</span>';
+  if (level === "estimate") return '<span class="srcTag srcTag--estimate">? оценка</span>';
+  return "";
+}
+
+function renderHybridNote() {
+  const hp = hybridPresets[state.hybrid];
+  const note = hp && hp.note ? hp.note : "";
+  const badge = hp ? sourceBadgeHtml(hp.confidence) : "";
+  $("hybridNote").innerHTML = badge || note ? `${badge}${note}` : "";
+}
+
+const AUTOSAVE_KEY = "roiCalcAutosave_v1";
+const INPUT_MODE_KEY = "roiCalcInputMode_v1";
+
+// Прогрессивное раскрытие: по умолчанию скрывает панели с параметрами, у
+// которых уже есть откалиброванные значения по умолчанию (НДС, энергия, вода
+// и защита, тара и плод, прочие затраты), оставляя всегда на виду только
+// культуру/режим и субстрат/дренаж - ядро сравнения А и Б. Переключение не
+// меняет ни одно значение полей, только видимость панелей.
+function setInputMode(mode) {
+  const advanced = mode === "advanced";
+  document.querySelectorAll(".advancedPanel").forEach((panel) => {
+    panel.classList.toggle("hidden", !advanced);
+  });
+  $("modeQuick").classList.toggle("active", !advanced);
+  $("modeAdvanced").classList.toggle("active", advanced);
+  $("modeHint").textContent = advanced
+    ? "Показаны все параметры расчета, включая справочные значения по умолчанию."
+    : "Показаны ключевые параметры сравнения. Остальное - справочные значения по умолчанию, откройте «Все параметры», чтобы их изменить.";
+  try {
+    localStorage.setItem(INPUT_MODE_KEY, mode);
+  } catch (e) {
+    // localStorage недоступен - режим просто не запомнится между визитами.
+  }
+}
+
+// Снимок состояния используется и для автосохранения в localStorage, и для
+// экспорта/импорта JSON (одна и та же сериализация под обе функции).
+function collectSnapshot() {
+  const values = {};
+  inputIds.forEach((id) => {
+    const el = $(id);
+    if (el) values[id] = el.value;
+  });
+  return {
+    version: 1,
+    savedAt: new Date().toISOString(),
+    values,
+    state: {
+      crop: state.crop,
+      hybrid: state.hybrid,
+      rowsByMode: state.rowsByMode,
+      periodDataEditedByMode: state.periodDataEditedByMode,
+      periodPricesEdited: state.periodPricesEdited,
+      lastVatMode: state.lastVatMode,
+    },
+  };
+}
+
+function applySnapshot(snap) {
+  if (!snap || !snap.values) return false;
+  if (snap.state) {
+    state.crop = snap.state.crop || state.crop;
+    state.hybrid = snap.state.hybrid || state.hybrid;
+    state.rowsByMode = snap.state.rowsByMode || state.rowsByMode;
+    state.periodDataEditedByMode = snap.state.periodDataEditedByMode || state.periodDataEditedByMode;
+    state.periodPricesEdited = !!snap.state.periodPricesEdited;
+    state.lastVatMode = snap.state.lastVatMode || state.lastVatMode;
+  }
+  document.querySelectorAll("[data-crop]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.crop === state.crop);
+  });
+  renderPackOptions();
+  renderSeedOptions();
+  renderHybridOptions();
+  Object.entries(snap.values).forEach(([id, value]) => {
+    const el = $(id);
+    if (el) el.value = value;
+  });
+  renderHybridNote();
+  fillRows(false);
+  renderPeriodInputs();
+  update();
+  return true;
+}
+
+let saveDraftTimer = null;
+function scheduleSaveDraft() {
+  clearTimeout(saveDraftTimer);
+  saveDraftTimer = setTimeout(saveDraft, 400);
+}
+
+function saveDraft() {
+  try {
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(collectSnapshot()));
+  } catch (e) {
+    // localStorage может быть недоступен (приватный режим и т.п.) - автосохранение
+    // не критично для работы калькулятора, тихо игнорируем.
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(AUTOSAVE_KEY);
+  } catch (e) {
+    // см. комментарий в saveDraft()
+  }
+}
+
+function restoreDraft() {
+  let raw = null;
+  try {
+    raw = localStorage.getItem(AUTOSAVE_KEY);
+  } catch (e) {
+    return;
+  }
+  if (!raw) return;
+  let snap;
+  try {
+    snap = JSON.parse(raw);
+  } catch (e) {
+    return;
+  }
+  if (applySnapshot(snap)) {
+    const date = new Date(snap.savedAt);
+    const text = isNaN(date)
+      ? "Черновик восстановлен"
+      : `Черновик восстановлен: ${date.toLocaleDateString("ru-RU")}, ${date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}`;
+    $("draftBannerText").textContent = text;
+    $("draftBanner").classList.remove("hidden");
+  }
+}
+
+let toolbarMsgTimer = null;
+function showToolbarMsg(text, isError) {
+  const el = $("dataToolbarMsg");
+  if (!el) return;
+  el.textContent = text;
+  el.style.color = isError ? "var(--red)" : "var(--green-dark)";
+  clearTimeout(toolbarMsgTimer);
+  toolbarMsgTimer = setTimeout(() => {
+    el.textContent = "";
+  }, 4000);
+}
+
+function exportSnapshotFile() {
+  const snap = collectSnapshot();
+  let blob;
+  try {
+    blob = new Blob([JSON.stringify(snap, null, 2)], { type: "application/json" });
+  } catch (e) {
+    showToolbarMsg("Не удалось сформировать файл для сохранения", true);
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = "roi-raschet-substrata_" + stamp + ".json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToolbarMsg("Расчёт сохранён в файл");
+}
+
+function importSnapshotFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    let snap;
+    try {
+      snap = JSON.parse(reader.result);
+    } catch (e) {
+      showToolbarMsg("Не удалось прочитать файл: неверный формат", true);
+      return;
+    }
+    if (!snap || !snap.values) {
+      showToolbarMsg("Файл не похож на сохранённый расчёт калькулятора", true);
+      return;
+    }
+    const proceed = confirm("Загрузка файла заменит все текущие значения в калькуляторе. Продолжить?");
+    if (!proceed) return;
+    const ok = applySnapshot(snap);
+    if (ok) {
+      showToolbarMsg("Расчёт загружен из файла");
+      scheduleSaveDraft();
+    } else {
+      showToolbarMsg("Не удалось загрузить расчёт из файла", true);
+    }
+  };
+  reader.onerror = () => showToolbarMsg("Не удалось прочитать файл", true);
+  reader.readAsText(file);
 }
 
 function setup() {
   renderPackOptions();
+  renderSeedOptions();
+  renderEnergyOptions();
+  renderProtectionOptions();
+  renderSeasonOptions();
+  renderDrainOptions();
   document.querySelectorAll("[data-crop]").forEach((button) => {
     button.addEventListener("click", () => setCrop(button.dataset.crop));
   });
+  document.querySelectorAll("[data-area-ha]").forEach((button) => {
+    button.addEventListener("click", () => {
+      $("areaHa").value = button.dataset.areaHa;
+      update();
+      scheduleSaveDraft();
+    });
+  });
   inputIds.forEach((id) => {
     const el = $(id);
-    if (el) el.addEventListener("input", handleInput);
-    if (el) el.addEventListener("change", handleInput);
+    if (!el) return;
+    // select/date/checkbox дают ровно одно "change" на изменение; для текстовых/числовых
+    // полей нужен "input" для живого пересчета по мере набора. Раньше оба слушателя
+    // висели на всех полях сразу - для select это означало двойной пересчет на клик.
+    if (el.tagName === "SELECT" || el.type === "date" || el.type === "checkbox" || el.type === "radio") {
+      el.addEventListener("change", handleInput);
+    } else {
+      el.addEventListener("input", handleInput);
+    }
   });
   $("fillCurve").addEventListener("click", () => {
-    fillRows();
+    const mode = $("revenueMode").value;
+    if (mode !== "simple" && state.periodDataEditedByMode[mode]) {
+      const proceed = confirm(
+        "Пересчет сотрет все ручные правки в таблице урожая/цен (для текущего режима: " +
+          (mode === "monthly" ? "по месяцам" : "по неделям") +
+          ") и вернет исходную сгенерированную кривую. Продолжить?",
+      );
+      if (!proceed) return;
+    }
+    fillRows(true);
+    if (mode !== "simple") state.periodDataEditedByMode[mode] = false;
     renderPeriodInputs();
     update();
+    scheduleSaveDraft();
   });
+  $("applySeason").addEventListener("click", () => {
+    applySeasonPreset();
+    scheduleSaveDraft();
+  });
+  $("draftDismiss").addEventListener("click", () => {
+    $("draftBanner").classList.add("hidden");
+  });
+  $("draftReset").addEventListener("click", () => {
+    const proceed = confirm(
+      "Начать заново сотрет сохраненный черновик в этом браузере и вернет калькулятор к значениям по умолчанию. Продолжить?",
+    );
+    if (!proceed) return;
+    clearDraft();
+    location.reload();
+  });
+  $("exportJson").addEventListener("click", exportSnapshotFile);
+  $("importJsonTrigger").addEventListener("click", () => {
+    $("importJsonFile").click();
+  });
+  $("importJsonFile").addEventListener("change", (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) importSnapshotFile(file);
+    event.target.value = "";
+  });
+  $("printView").addEventListener("click", () => {
+    window.print();
+  });
+  $("modeQuick").addEventListener("click", () => setInputMode("quick"));
+  $("modeAdvanced").addEventListener("click", () => setInputMode("advanced"));
+  let savedMode = "quick";
+  try {
+    savedMode = localStorage.getItem(INPUT_MODE_KEY) || "quick";
+  } catch (e) {
+    // localStorage недоступен - остаемся в быстром режиме по умолчанию.
+  }
+  setInputMode(savedMode);
   setCrop("cucumber");
+  restoreDraft();
 }
 
 function renderPackOptions() {
   $("packPreset").innerHTML = Object.entries(packPresets)
+    .filter(([, preset]) => preset.crop === "all" || preset.crop === state.crop)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+}
+
+function renderSeedOptions() {
+  $("seedPreset").innerHTML = Object.entries(seedPresets)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+}
+
+function renderEnergyOptions() {
+  $("energyPreset").innerHTML = Object.entries(energyPresets)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+  $("energyPreset").value = "manual";
+}
+
+function applyEnergyPreset() {
+  const preset = energyPresets[$("energyPreset").value];
+  if (!preset || preset.mode === null) return;
+  $("energyMode").value = preset.mode;
+  $("gpuPrice").value = preset.gpuPrice;
+  $("gridPrice").value = preset.gridPrice;
+  $("gasPrice").value = preset.gasPrice;
+  if (preset.gpuShare) $("gpuShare").value = preset.gpuShare;
+}
+
+function renderProtectionOptions() {
+  $("protectionPreset").innerHTML = Object.entries(protectionPresets)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+  $("protectionPreset").value = "manual";
+}
+
+function applyProtectionPreset() {
+  const preset = protectionPresets[$("protectionPreset").value];
+  if (!preset || preset.chemCycle === null) return;
+  $("protectionMode").value = "cycle";
+  $("chemCycle").value = preset.chemCycle;
+  $("bioCycle").value = preset.bioCycle;
+  $("entoCycle").value = preset.entoCycle;
+}
+
+function renderSeasonOptions() {
+  $("seasonPreset").innerHTML = Object.entries(seasonPresets)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+}
+
+function applySeasonPreset() {
+  const preset = seasonPresets[$("seasonPreset").value];
+  if (!preset || $("revenueMode").value === "simple") return;
+  const factor = preset.factorByCrop[state.crop] ?? 1;
+  state.rows.forEach((row) => {
+    row.price = round(row.price * factor, 0);
+    row.offPrice = round(row.offPrice * factor, 0);
+  });
+  state.periodDataEditedByMode[state.revenueMode] = true;
+  state.periodPricesEdited = true;
+  renderPeriodInputs();
+  update();
+}
+
+function renderDrainOptions() {
+  $("drainPreset").innerHTML = Object.entries(drainPresets)
+    .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+    .join("");
+  $("drainPreset").value = "manual";
+}
+
+function applyDrainPreset() {
+  const preset = drainPresets[$("drainPreset").value];
+  if (!preset || preset.drainAPct === null) return;
+  $("drainA").value = preset.drainAPct;
+  $("drainDelta").value = preset.drainDelta;
+  if ($("drainInputMode").value === "direct") {
+    $("drainB").value = preset.drainAPct + preset.drainDelta;
+  }
+}
+
+function getEffectiveDefaults() {
+  const base = cropDefaults[state.crop];
+  const hybrid = hybridPresets[state.hybrid];
+  if (hybrid && (hybrid.crop === "all" || hybrid.crop === state.crop)) {
+    return { ...base, ...hybrid };
+  }
+  return base;
+}
+
+function renderHybridOptions() {
+  $("hybridPreset").innerHTML = Object.entries(hybridPresets)
+    .filter(([, preset]) => preset.crop === "all" || preset.crop === state.crop)
     .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
     .join("");
 }
 
 function setCrop(crop) {
   state.crop = crop;
+  state.hybrid = cropDefaults[crop].defaultHybrid;
+  state.rowsByMode = { weekly: [], monthly: [] };
+  state.periodDataEditedByMode = { weekly: false, monthly: false };
+  // Формула "радиация за оборот / дни оборота" откалибрована на короткий цикл (огурец,
+  // ~90 дней) - для длинного оборота томата (~330 дней) она занижает расход воды в разы
+  // (см. предупреждение под селектором метода расчета). Формулу не меняем, но для
+  // томата переключаем метод по умолчанию на ручной ввод, чтобы не выдавать заведомо
+  // заниженное число без явного действия пользователя.
+  $("waterCalcMode").value = crop === "tomato" ? "manual" : "radiation";
   document.querySelectorAll("[data-crop]").forEach((button) => {
     button.classList.toggle("active", button.dataset.crop === crop);
   });
-  const d = cropDefaults[crop];
+  const base = cropDefaults[crop];
+  renderPackOptions();
+  renderSeedOptions();
+  renderHybridOptions();
+  $("hybridPreset").value = state.hybrid;
+  const d = getEffectiveDefaults();
   $("cycleDays").value = d.cycleDays;
-  $("electricityUse").value = d.electricityUse;
-  $("matPriceA").value = d.matPriceA;
-  $("matPriceB").value = d.matPriceB;
-  $("simpleYieldA").value = d.simpleYieldA;
-  $("simpleYieldB").value = d.simpleYieldB;
-  $("simplePrice").value = d.simplePrice;
-  $("simpleOffPrice").value = d.simpleOffPrice;
+  $("electricityUse").value = base.electricityUse;
+  $("matPriceA").value = base.matPriceA;
+  $("matPriceB").value = base.matPriceB;
+  $("simpleYieldA").value = base.simpleYieldA;
+  $("simpleYieldB").value = base.simpleYieldB;
+  $("simplePrice").value = base.simplePrice;
+  $("simpleOffPrice").value = base.simpleOffPrice;
   $("offgradeA").value = d.offgradeA;
   $("offgradeB").value = d.offgradeB;
-  $("staffPerHa").value = d.staffPerHa;
+  $("staffPerHa").value = base.staffPerHa;
   $("plantDensity").value = d.plantDensity;
-  $("seedPrice").value = d.seedPrice;
-  $("harvestStartA").value = crop === "cucumber" ? "2026-02-02" : "2026-03-09";
-  $("harvestStartB").value = crop === "cucumber" ? "2026-02-09" : "2026-03-16";
-  $("packPreset").value = d.pack;
-  $("packKg").value = packPresets[d.pack].kg;
-  fillRows();
+  $("seedPreset").value = d.seedPreset;
+  const seedInfo = seedPresets[d.seedPreset];
+  $("seedPrice").value = seedInfo && seedInfo.price ? seedInfo.price : base.seedPrice;
+  state.harvestAuto = true;
+  $("cycleStartA").value = $("cycleStart").value;
+  $("cycleStartB").value = $("cycleStart").value;
+  syncHarvestDefaults();
+  $("packPreset").value = base.pack;
+  $("packKg").value = packPresets[base.pack].kg;
+  $("fruitWeightG").value = d.fruitWeightG;
+  renderHybridNote();
+  syncCycleEndFromDays();
+  fillRows(true);
   renderPeriodInputs();
   update();
+}
+
+function applyHybridPreset() {
+  const hp = hybridPresets[state.hybrid];
+  if (!hp) return;
+  state.rowsByMode = { weekly: [], monthly: [] };
+  state.periodDataEditedByMode = { weekly: false, monthly: false };
+  const d = getEffectiveDefaults();
+  $("cycleDays").value = d.cycleDays;
+  $("offgradeA").value = d.offgradeA;
+  $("offgradeB").value = d.offgradeB;
+  $("plantDensity").value = d.plantDensity;
+  $("fruitWeightG").value = d.fruitWeightG;
+  $("seedPreset").value = d.seedPreset;
+  const seedInfo = seedPresets[d.seedPreset];
+  if (seedInfo && seedInfo.price) $("seedPrice").value = seedInfo.price;
+  renderHybridNote();
+  state.harvestAuto = true;
+  syncHarvestDefaults();
+  syncCycleEndFromDays();
+  fillRows(true);
+  renderPeriodInputs();
 }
 
 function handleInput(event) {
+  if (event && event.target.id === "vatMode" && event.target.value !== state.lastVatMode) {
+    if (state.periodPricesEdited) {
+      const proceed = confirm(
+        "В таблице по неделям/месяцам уже есть цены, введенные вручную. При смене формата денежных полей эти цены (и другие денежные поля) будут молча пересчитаны в новую интерпретацию (без НДС / с НДС). Продолжить?",
+      );
+      if (!proceed) {
+        event.target.value = state.lastVatMode;
+        return;
+      }
+    }
+    state.lastVatMode = event.target.value;
+  }
+  updateRowStateFromDom();
+  if (event && ["cycleTimingMode", "cycleStart", "cycleDays", "cycleEnd", "cycleStartA", "cycleEndA", "cycleStartB", "cycleEndB"].includes(event.target.id)) {
+    syncCycleFields(event.target.id);
+    syncHarvestDefaults();
+  }
+  if (event && event.target.id === "harvestTimingMode") {
+    syncHarvestFields("harvestTimingMode");
+    syncHarvestDefaults();
+  }
+  if (event && event.target.id === "harvestStartA") {
+    state.harvestAuto = false;
+    syncHarvestFields("harvestStartA");
+  }
+  if (event && event.target.id === "harvestStartB") {
+    state.harvestAuto = false;
+  }
   if (event && event.target.id === "waterPreset") {
     const preset = waterPresets[$("waterPreset").value];
-    if (preset.waterUse) $("waterUse").value = preset.waterUse;
+    if (preset.radiation) $("radiationKj").value = preset.radiation;
+    if (preset.waterCoef) $("waterCoef").value = preset.waterCoef;
+  }
+  if (event && event.target.id === "waterCalcMode") {
+    syncWaterFromRadiation();
   }
   if (event && event.target.id === "packPreset") {
-    $("packKg").value = packPresets[$("packPreset").value].kg;
+    const preset = packPresets[$("packPreset").value];
+    $("packKg").value = preset.kg;
+    $("fruitWeightG").value = preset.fruitWeightG;
+  }
+  if (event && event.target.id === "seedPreset") {
+    const preset = seedPresets[$("seedPreset").value];
+    if (preset && preset.price) $("seedPrice").value = preset.price;
+  }
+  if (event && event.target.id === "hybridPreset") {
+    const mode = $("revenueMode").value;
+    const changed = $("hybridPreset").value !== state.hybrid;
+    if (changed && mode !== "simple" && state.periodDataEditedByMode[mode]) {
+      const proceed = confirm(
+        "Смена гибрида пересчитает кривую урожая по новым параметрам и сотрет все ручные правки в таблице урожая/цен (для текущего режима: " +
+          (mode === "monthly" ? "по месяцам" : "по неделям") +
+          "). Продолжить?",
+      );
+      if (!proceed) {
+        event.target.value = state.hybrid;
+        return;
+      }
+    }
+    state.hybrid = $("hybridPreset").value;
+    applyHybridPreset();
+  }
+  if (event && event.target.id === "energyPreset") {
+    applyEnergyPreset();
+  }
+  if (event && event.target.id === "protectionPreset") {
+    applyProtectionPreset();
+  }
+  if (event && event.target.id === "drainPreset") {
+    applyDrainPreset();
   }
   if (event && event.target.id === "revenueMode") {
     state.revenueMode = $("revenueMode").value;
-    fillRows();
+    fillRows(false);
     renderPeriodInputs();
   }
-  if (event && ["cycleStart", "harvestStartA", "harvestStartB"].includes(event.target.id)) {
-    fillRows();
+  if (event && ["cycleTimingMode", "cycleDays", "cycleEnd", "cycleStartA", "cycleEndA", "cycleStartB", "cycleEndB"].includes(event.target.id)) {
+    refreshRowLabelsAndTrim();
     renderPeriodInputs();
   }
-  updateRowStateFromDom();
-  renderPeriodInputs();
+  if (event && ["cycleStart", "harvestTimingMode", "harvestStartA", "harvestStartB"].includes(event.target.id)) {
+    updateRowLabelsOnly();
+    renderPeriodInputs();
+  }
   update();
+  scheduleSaveDraft();
 }
 
-function fillRows() {
+function syncWaterFromRadiation() {
+  if ($("waterCalcMode").value !== "radiation") return;
+  const dailyUse = getBaseWaterUse();
+  $("waterUse").value = number(dailyUse, 2);
+}
+
+function getBaseWaterUse() {
+  if ($("waterCalcMode").value === "manual") return n("waterUse");
+  const totalLitersPerM2 = n("radiationKj") * n("waterCoef");
+  return totalLitersPerM2 / Math.max(1, n("cycleDays"));
+}
+
+function splitEarlyStartRevenue(periods) {
+  // Доп. выручка складывается из двух разных причин: (1) субстрат А может начать
+  // плодоношение раньше Б - тогда в "головных" периодах, где у Б еще нет урожая,
+  // вся выручка А идет в счет более раннего старта; (2) в периодах, где оба уже
+  // плодоносят, разница объясняется отличиями в урожайности/цене. Разделяем их,
+  // чтобы не сваливать два разных аргумента продажи в одну строку.
+  let earlyStartRevenue = 0;
+  periods.forEach((row) => {
+    if (row.yieldB <= 0.001 && row.yieldA > 0.001) {
+      earlyStartRevenue += row.revenueA - row.revenueB;
+    }
+  });
+  return earlyStartRevenue;
+}
+
+function getDrainPair() {
+  const drainAPct = n("drainA");
+  const drainBPct = $("drainInputMode").value === "direct" ? n("drainB") : drainAPct + n("drainDelta");
+  return { drainAPct, drainBPct, deltaPct: drainBPct - drainAPct };
+}
+
+function syncCycleFields(sourceId) {
+  if (sourceId === "cycleTimingMode") {
+    if ($("cycleTimingMode").value === "different") {
+      $("cycleStartA").value = $("cycleStart").value;
+      $("cycleStartB").value = $("cycleStart").value;
+    } else {
+      $("cycleStart").value = $("cycleStartA").value || $("cycleStart").value;
+    }
+  }
+  if (sourceId === "cycleEndA" || sourceId === "cycleStartA") state.lastSplitCyclePair = "A";
+  if (sourceId === "cycleEndB" || sourceId === "cycleStartB") state.lastSplitCyclePair = "B";
+  if ($("cycleTimingMode").value === "different") {
+    if (sourceId === "cycleEndA" || sourceId === "cycleEndB") {
+      state.lastCycleEdit = "end";
+      syncCycleDaysFromSplitEnd(state.lastSplitCyclePair);
+    } else {
+      if (sourceId === "cycleDays") state.lastCycleEdit = "days";
+      if (state.lastCycleEdit === "end") {
+        syncCycleDaysFromSplitEnd(state.lastSplitCyclePair);
+      }
+    }
+    syncSplitCycleEndsFromDays();
+    return;
+  }
+  if (sourceId === "cycleEnd") {
+    state.lastCycleEdit = "end";
+    syncCycleDaysFromEnd();
+    return;
+  }
+  if (sourceId === "cycleDays") {
+    state.lastCycleEdit = "days";
+  }
+  if (state.lastCycleEdit === "end") {
+    syncCycleDaysFromEnd();
+  } else {
+    syncCycleEndFromDays();
+  }
+}
+
+function syncCycleEndFromDays() {
+  const start = parseDate($("cycleStart").value);
+  const days = Math.max(1, Math.round(n("cycleDays")));
+  if (!start || !days) return;
+  $("cycleEnd").value = formatDateInput(addDays(start, days - 1));
+  $("cycleStartA").value = $("cycleStart").value;
+  $("cycleStartB").value = $("cycleStart").value;
+  syncSplitCycleEndsFromDays();
+}
+
+function syncCycleDaysFromEnd() {
+  const start = parseDate($("cycleStart").value);
+  const end = parseDate($("cycleEnd").value);
+  if (!start || !end) return;
+  const days = Math.max(1, Math.round((end - start) / MS_DAY) + 1);
+  $("cycleDays").value = days;
+  $("cycleStartA").value = $("cycleStart").value;
+  $("cycleStartB").value = $("cycleStart").value;
+  syncSplitCycleEndsFromDays();
+}
+
+function syncSplitCycleEndsFromDays() {
+  const days = Math.max(1, Math.round(n("cycleDays")));
+  ["A", "B"].forEach((suffix) => {
+    const start = parseDate($(`cycleStart${suffix}`).value);
+    if (start && days) $(`cycleEnd${suffix}`).value = formatDateInput(addDays(start, days - 1));
+  });
+}
+
+function syncCycleDaysFromSplitEnd(suffix) {
+  const start = parseDate($(`cycleStart${suffix}`).value);
+  const end = parseDate($(`cycleEnd${suffix}`).value);
+  if (!start || !end) return;
+  $("cycleDays").value = Math.max(1, Math.round((end - start) / MS_DAY) + 1);
+}
+
+function syncHarvestFields(sourceId) {
+  if ($("harvestTimingMode").value === "same") {
+    $("harvestStartB").value = $("harvestStartA").value;
+  } else if (sourceId === "harvestTimingMode") {
+    $("harvestStartB").value = $("harvestStartB").value || $("harvestStartA").value;
+  }
+}
+
+function syncHarvestDefaults() {
+  if (!state.harvestAuto) return;
+  const d = getEffectiveDefaults();
+  const startA = getCycleStartA();
+  const startB = getCycleStartB();
+  if (startA) $("harvestStartA").value = formatDateInput(addDays(startA, d.harvestOffsetDays));
+  if ($("harvestTimingMode").value === "different") {
+    if (startB) $("harvestStartB").value = formatDateInput(addDays(startB, d.harvestOffsetDays));
+  } else {
+    $("harvestStartB").value = $("harvestStartA").value;
+  }
+}
+
+function getCycleStartA() {
+  return parseDate($("cycleTimingMode").value === "different" ? $("cycleStartA").value : $("cycleStart").value);
+}
+
+function getCycleStartB() {
+  return parseDate($("cycleTimingMode").value === "different" ? $("cycleStartB").value : $("cycleStart").value);
+}
+
+function getBaseCycleStart() {
+  const startA = getCycleStartA();
+  const startB = getCycleStartB();
+  if (startA && startB) return startA < startB ? startA : startB;
+  return startA || startB || parseDate($("cycleStart").value);
+}
+
+function fillRows(force = false) {
   state.revenueMode = $("revenueMode").value;
+  if (!force && state.rowsByMode[state.revenueMode] && state.rowsByMode[state.revenueMode].length) {
+    state.rows = state.rowsByMode[state.revenueMode];
+    refreshRowLabelsAndTrim();
+    return;
+  }
   if (state.revenueMode === "monthly") {
-    const startDate = parseDate($("cycleStart").value);
-    state.rows = months.map((name, index) => {
+    const startDate = getBaseCycleStart();
+    const monthCount = Math.max(1, Math.ceil(n("cycleDays") / 30));
+    state.rows = Array.from({ length: monthCount }, (_, index) => {
+      const monthIndex = startDate ? addDays(startDate, index * 30).getMonth() : index % 12;
+      const name = months[monthIndex];
       const winter = index < 3 || index > 9;
       const shoulder = index === 3 || index === 8 || index === 9;
       const price = winter ? (state.crop === "cucumber" ? 170 : 130) : shoulder ? 110 : 70;
@@ -1043,27 +2538,68 @@ function fillRows() {
         offPrice: price * 0.85,
       };
     });
+    state.rowsByMode.monthly = state.rows;
     return;
   }
 
-  const d = cropDefaults[state.crop];
-  const cycleStart = parseDate($("cycleStart").value);
+  const d = getEffectiveDefaults();
+  const weekCount = Math.max(1, Math.ceil(n("cycleDays") / 7));
+  const baseCycleStart = getBaseCycleStart();
   const startA = parseDate($("harvestStartA").value);
   const startB = parseDate($("harvestStartB").value);
-  const startWeekA = cycleStart && startA ? Math.max(1, Math.ceil((startA - cycleStart) / 604800000) + 1) : d.startA;
-  const startWeekB = cycleStart && startB ? Math.max(1, Math.ceil((startB - cycleStart) / 604800000) + 1) : d.startB;
-  state.rows = Array.from({ length: d.weekCount }, (_, index) => {
+  const startWeekA = baseCycleStart && startA ? Math.max(1, Math.ceil((startA - baseCycleStart) / 604800000) + 1) : d.startA;
+  const startWeekB = baseCycleStart && startB ? Math.max(1, Math.ceil((startB - baseCycleStart) / 604800000) + 1) : d.startB;
+  state.rows = Array.from({ length: weekCount }, (_, index) => {
     const week = index + 1;
-    const price = seasonalWeekPrice(week, d.weekCount);
-    const date = cycleStart ? formatShortDate(addDays(cycleStart, index * 7)) : "";
+    const price = seasonalWeekPrice(week, weekCount);
+    const date = baseCycleStart ? formatShortDate(addDays(baseCycleStart, index * 7)) : "";
     return {
       label: date ? `Нед. ${week} (${date})` : `Нед. ${week}`,
-      yieldA: weeklyCurve(week, startWeekA, d.peakYieldA, d.weekCount),
-      yieldB: weeklyCurve(week, startWeekB, d.peakYieldB, d.weekCount),
+      yieldA: weeklyCurve(week, startWeekA, d.peakYieldA, weekCount),
+      yieldB: weeklyCurve(week, startWeekB, d.peakYieldB, weekCount),
       price,
       offPrice: price * 0.85,
     };
   });
+  state.rowsByMode.weekly = state.rows;
+}
+
+function refreshRowLabelsAndTrim() {
+  const mode = $("revenueMode").value;
+  if (mode === "simple") return;
+  const existing = state.rowsByMode[mode] && state.rowsByMode[mode].length ? state.rowsByMode[mode] : state.rows;
+  const previousRows = existing.map((row) => ({ ...row }));
+  fillRows(true);
+  const generated = state.rows;
+  generated.forEach((row, index) => {
+    const previous = previousRows[index];
+    if (!previous) return;
+    row.yieldA = previous.yieldA;
+    row.yieldB = previous.yieldB;
+    row.price = previous.price;
+    row.offPrice = previous.offPrice;
+  });
+  state.rowsByMode[mode] = generated;
+  state.rows = generated;
+}
+
+function updateRowLabelsOnly() {
+  const mode = $("revenueMode").value;
+  if (mode === "simple") return;
+  const rows = state.rowsByMode[mode] && state.rowsByMode[mode].length ? state.rowsByMode[mode] : state.rows;
+  const startDate = getBaseCycleStart();
+  if (mode === "monthly") {
+    rows.forEach((row, index) => {
+      row.label = startDate ? monthLabel(addDays(startDate, index * 30)) : months[index % 12];
+    });
+  } else {
+    rows.forEach((row, index) => {
+      const week = index + 1;
+      const date = startDate ? formatShortDate(addDays(startDate, index * 7)) : "";
+      row.label = date ? `Нед. ${week} (${date})` : `Нед. ${week}`;
+    });
+  }
+  state.rows = rows;
 }
 
 function seasonalWeekPrice(week, weekCount) {
@@ -1073,11 +2609,24 @@ function seasonalWeekPrice(week, weekCount) {
     if (week <= 11) return 110;
     return 80;
   }
+  // Томат: обновлено по открытым источникам (Rosstat/АгроXXI/РБК, данные конца 2025 - начала
+  // 2026). Опт на конец января 2026 ~144 руб/кг. Ключевой вывод исследования: сезонный размах
+  // цены на томат ЗАМЕТНО МЕНЬШЕ, чем на огурец (пик/дно у огурца ~2.4х, у томата ~1.6-1.7х) -
+  // потому что РФ лишь на ~80% обеспечивает себя томатом (Турция/Азербайджан закрывают разрыв
+  // круглый год), а огурцом - на ~94%, и зимний скачок себестоимости огурца этим импортом
+  // не демпфируется. У томата также заметное осеннее восстановление цены (сентябрь-октябрь),
+  // а не только январский пик - кривая ниже это учитывает 7 сегментами вместо 4.
+  // Опт-цифры по месяцам сами по себе в открытом доступе скудные - кривая построена от формы
+  // розничного индекса (eurocredit.ru) и masштабирована к найденной опт-точке ~144 руб/кг;
+  // это ориентир, не измеренный ряд, и требует сверки с вашими фактическими контрактами.
   const progress = week / weekCount;
-  if (progress < 0.22) return 135;
-  if (progress < 0.45) return 110;
-  if (progress < 0.72) return 85;
-  return 115;
+  if (progress < 0.15) return 140; // январь: зимний пик (опт ~144 руб/кг, конец янв. 2026)
+  if (progress < 0.3) return 120; // февраль-март: снижение к весне
+  if (progress < 0.45) return 100; // апрель-май: продолжение снижения
+  if (progress < 0.6) return 85; // июнь-июль: летний минимум (открытый грунт + импорт)
+  if (progress < 0.78) return 95; // август: дно сезона, начало восстановления
+  if (progress < 0.92) return 120; // сентябрь-октябрь: осеннее восстановление
+  return 135; // ноябрь-декабрь: снова рост к зиме
 }
 
 function weeklyCurve(week, start, peak, totalWeeks) {
@@ -1095,7 +2644,16 @@ function renderPeriodInputs() {
     $("periodTableWrap").innerHTML = "";
     return;
   }
+  // Периоды без урожая ни у А, ни у Б (обычно до старта сбора) скрываем из таблицы -
+  // но не из state.rows: расчет (calculate/summarizeRevenue) по-прежнему видит полный
+  // массив периодов, скрывается только отображение. Если скрывать нечего - fallback
+  // показывает все строки, чтобы таблица не оказалась пустой.
+  const indexed = state.rows.map((row, index) => ({ row, index }));
+  let visible = indexed.filter(({ row }) => row.yieldA > 0.001 || row.yieldB > 0.001);
+  if (visible.length === 0) visible = indexed;
+  const hiddenCount = indexed.length - visible.length;
   $("periodTableWrap").innerHTML = `
+    ${hiddenCount > 0 ? `<p class="hint">Скрыто периодов без урожая: ${hiddenCount} (до старта сбора или после его окончания у обоих субстратов).</p>` : ""}
     <table>
       <thead>
         <tr>
@@ -1107,9 +2665,9 @@ function renderPeriodInputs() {
         </tr>
       </thead>
       <tbody>
-        ${state.rows
+        ${visible
           .map(
-            (row, index) => `
+            ({ row, index }) => `
           <tr>
             <td>${row.label}</td>
             <td><input data-row="${index}" data-field="yieldA" type="number" step="0.01" value="${round(row.yieldA, 2)}" /></td>
@@ -1120,14 +2678,28 @@ function renderPeriodInputs() {
           )
           .join("")}
       </tbody>
+      <tfoot>
+        <tr>
+          <th>Итого</th>
+          <th id="periodTotalYieldA">0</th>
+          <th id="periodTotalYieldB">0</th>
+          <th id="periodAvgPrice">0</th>
+          <th id="periodAvgOffPrice">0</th>
+        </tr>
+      </tfoot>
     </table>
   `;
   $("periodTableWrap").querySelectorAll("input").forEach((input) => {
     input.addEventListener("input", () => {
+      if (input.dataset.field === "price" || input.dataset.field === "offPrice") {
+        state.periodPricesEdited = true;
+      }
+      state.periodDataEditedByMode[mode] = true;
       updateRowStateFromDom();
       update();
     });
   });
+  updatePeriodTotals();
 }
 
 function updateRowStateFromDom() {
@@ -1139,16 +2711,35 @@ function updateRowStateFromDom() {
   });
 }
 
+function updatePeriodTotals() {
+  if ($("revenueMode").value === "simple") return;
+  const totalYieldA = state.rows.reduce((sum, row) => sum + (Number(row.yieldA) || 0), 0);
+  const totalYieldB = state.rows.reduce((sum, row) => sum + (Number(row.yieldB) || 0), 0);
+  const totalYield = totalYieldA + totalYieldB;
+  const weightedPrice =
+    totalYield > 0
+      ? state.rows.reduce((sum, row) => sum + ((Number(row.yieldA) || 0) + (Number(row.yieldB) || 0)) * (Number(row.price) || 0), 0) / totalYield
+      : 0;
+  const weightedOffPrice =
+    totalYield > 0
+      ? state.rows.reduce((sum, row) => sum + ((Number(row.yieldA) || 0) + (Number(row.yieldB) || 0)) * (Number(row.offPrice) || 0), 0) / totalYield
+      : 0;
+  if ($("periodTotalYieldA")) $("periodTotalYieldA").textContent = `${number(totalYieldA, 2)} кг/м2`;
+  if ($("periodTotalYieldB")) $("periodTotalYieldB").textContent = `${number(totalYieldB, 2)} кг/м2`;
+  if ($("periodAvgPrice")) $("periodAvgPrice").textContent = `${number(weightedPrice, 1)} руб./кг`;
+  if ($("periodAvgOffPrice")) $("periodAvgOffPrice").textContent = `${number(weightedOffPrice, 1)} руб./кг`;
+}
+
 function collectRevenue() {
-  const area = n("area");
+  const area = getAreaM2();
   const offA = n("offgradeA") / 100;
   const offB = n("offgradeB") / 100;
 
   if ($("revenueMode").value === "simple") {
     const yieldA = n("simpleYieldA");
     const yieldB = n("simpleYieldB");
-    const price = n("simplePrice");
-    const offPrice = n("simpleOffPrice");
+    const price = m("simplePrice");
+    const offPrice = m("simpleOffPrice");
     return summarizeRevenue(
       [{ label: "Оборот", yieldA, yieldB, price, offPrice }],
       area,
@@ -1157,7 +2748,12 @@ function collectRevenue() {
     );
   }
 
-  return summarizeRevenue(state.rows, area, offA, offB);
+  return summarizeRevenue(
+    state.rows.map((row) => ({ ...row, price: netValue(row.price), offPrice: netValue(row.offPrice) })),
+    area,
+    offA,
+    offB,
+  );
 }
 
 function summarizeRevenue(rows, area, offA, offB) {
@@ -1210,39 +2806,43 @@ function summarizeRevenue(rows, area, offA, offB) {
 }
 
 function calculate() {
-  const area = n("area");
-  const days = n("cycleDays");
-  const drainA = n("drainA") / 100;
-  const drainB = (n("drainA") + n("drainDelta")) / 100;
+  const area = getAreaM2();
+  const days = Math.max(1, n("cycleDays"));
+  const drainPair = getDrainPair();
+  const drainA = drainPair.drainAPct / 100;
+  const drainB = drainPair.drainBPct / 100;
   const isRecirculatedDrain = $("drainMode").value === "recirculated";
   const revenue = collectRevenue();
   const energyPrice = getEnergyPrice();
+  const baseWaterUse = getBaseWaterUse();
 
-  const substrateA = (n("matPriceA") * n("matsPerHa") * (1 + n("wasteA") / 100) * area) / 10000;
-  const substrateB = (n("matPriceB") * n("matsPerHa") * (1 + n("wasteB") / 100) * area) / 10000;
-  const waterLitersA = n("waterUse") / Math.max(0.01, 1 - drainA);
-  const waterLitersB = n("waterUse") / Math.max(0.01, 1 - drainB);
-  const potentialWaterA = (waterLitersA / 1000) * area * days * n("waterPrice");
-  const potentialWaterB = (waterLitersB / 1000) * area * days * n("waterPrice");
-  const potentialFertA = (waterLitersA / 1000) * area * days * n("fertilizerPrice");
-  const potentialFertB = (waterLitersB / 1000) * area * days * n("fertilizerPrice");
+  const substrateA = (m("matPriceA") * n("matsPerHa") * (1 + n("wasteA") / 100) * area) / 10000;
+  const substrateB = (m("matPriceB") * n("matsPerHa") * (1 + n("wasteB") / 100) * area) / 10000;
+  const waterLitersA = baseWaterUse / Math.max(0.01, 1 - drainA);
+  const waterLitersB = baseWaterUse / Math.max(0.01, 1 - drainB);
+  const potentialWaterA = (waterLitersA / 1000) * area * days * m("waterPrice");
+  const potentialWaterB = (waterLitersB / 1000) * area * days * m("waterPrice");
+  const potentialFertA = (waterLitersA / 1000) * area * days * m("fertilizerPrice");
+  const potentialFertB = (waterLitersB / 1000) * area * days * m("fertilizerPrice");
   const waterA = potentialWaterA;
   const waterB = isRecirculatedDrain ? potentialWaterA : potentialWaterB;
   const fertA = potentialFertA;
   const fertB = isRecirculatedDrain ? potentialFertA : potentialFertB;
   const energy = n("electricityUse") * energyPrice * area * days;
   const protection = getProtectionCost(area, days);
-  const gas = n("gasUse") * n("gasPrice") * area * days;
+  const gas = n("gasUse") * m("gasPrice") * area * days;
   const labor = n("staffPerHa") * 8 * n("laborHourPrice") * days * area / 10000;
-  const seeds = n("plantDensity") * n("seedPrice") * area;
-  const packA = revenue.yieldA * area / Math.max(0.1, n("packKg")) * n("packPrice");
-  const packB = revenue.yieldB * area / Math.max(0.1, n("packKg")) * n("packPrice");
+  const seeds = n("plantDensity") * m("seedPrice") * area;
+  const packA = revenue.yieldA * area / Math.max(0.1, n("packKg")) * m("packPrice");
+  const packB = revenue.yieldB * area / Math.max(0.1, n("packKg")) * m("packPrice");
 
   const costA = substrateA + waterA + fertA + energy + gas + protection + labor + seeds + packA;
   const costB = substrateB + waterB + fertB + energy + gas + protection + labor + seeds + packB;
   const profitA = revenue.revenueA - costA;
   const profitB = revenue.revenueB - costB;
   const extraRevenue = revenue.revenueA - revenue.revenueB;
+  const earlyStartRevenue = splitEarlyStartRevenue(revenue.periods);
+  const otherRevenue = extraRevenue - earlyStartRevenue;
   const substrateDelta = substrateA - substrateB;
   const potentialWaterSaving = potentialWaterB - potentialWaterA;
   const potentialFertSaving = potentialFertB - potentialFertA;
@@ -1250,9 +2850,25 @@ function calculate() {
   const fertSaving = isRecirculatedDrain ? 0 : potentialFertSaving;
   const packDelta = packA - packB;
   const profitDelta = profitA - profitB;
+  // Прибавка урожая требует и доп. тары, поэтому для точки окупаемости берем не
+  // полную цену реализации, а цену за вычетом затрат на тару для 1 доп. кг
+  // (packA/packB растут пропорционально yieldA/yieldB, поэтому это точная поправка,
+  // а не оценка "на глаз"). cleanExtraCost по-прежнему не включает packDelta -
+  // тара учтена через маржинальную цену ниже.
+  // Часть прибавки уйдет в нестандарт (по ставке offgradeA, той же, что у остального
+  // урожая А) и продастся дешевле (~85% от цены стандарта) - множитель (1 - 0.15*offA)
+  // это точный пересчет средней цены доп. кг с учетом доли нестандарта. Та же формула
+  // используется в drawHeatmap() ниже - раньше они считали маржинальную цену по-разному
+  // (тепловая карта учитывала нестандарт, сводная точка окупаемости - нет), из-за чего
+  // ноль на карте не совпадал с точкой окупаемости в сводке. Теперь формула одна.
   const cleanExtraCost = substrateDelta - waterSaving - fertSaving;
-  const avgPrice = revenue.avgPriceA || revenue.avgPriceB || n("simplePrice");
-  const breakEvenKg = cleanExtraCost / Math.max(1, avgPrice * area);
+  const avgPrice = revenue.avgPriceA || revenue.avgPriceB || m("simplePrice");
+  const packCostPerKg = m("packPrice") / Math.max(0.1, n("packKg"));
+  const offA = n("offgradeA") / 100;
+  const marginalPrice = Math.max(1, avgPrice * (1 - 0.15 * offA) - packCostPerKg);
+  const breakEvenKg = Math.max(0, cleanExtraCost / Math.max(1, marginalPrice * area));
+  const breakEvenFruitPerM2 = breakEvenKg * 1000 / Math.max(1, n("fruitWeightG"));
+  const breakEvenFruitPerPlant = breakEvenFruitPerM2 / Math.max(0.01, n("plantDensity"));
   const earlyStart = firstHarvestOffset(revenue.periods);
 
   return {
@@ -1261,6 +2877,12 @@ function calculate() {
     drainB,
     drainMode: $("drainMode").value,
     energyPrice,
+    water: {
+      baseDaily: baseWaterUse,
+      baseTotal: baseWaterUse * days,
+      solutionTotalA: waterLitersA * days,
+      solutionTotalB: waterLitersB * days,
+    },
     revenue,
     costs: {
       substrateA,
@@ -1285,28 +2907,38 @@ function calculate() {
     profitB,
     profitDelta,
     extraRevenue,
+    earlyStartRevenue,
+    otherRevenue,
     substrateDelta,
     waterSaving,
     fertSaving,
     packDelta,
+    cleanExtraCost,
+    marginalPrice,
+    packCostPerKg,
     breakEvenKg,
+    breakEvenFruitPerM2,
+    breakEvenFruitPerPlant,
     earlyStart,
   };
 }
 
 function getEnergyPrice() {
   const mode = $("energyMode").value;
-  if (mode === "gpu") return n("gpuPrice");
-  if (mode === "grid") return n("gridPrice");
+  if (mode === "gpu") return m("gpuPrice");
+  if (mode === "grid") return m("gridPrice");
   const share = n("gpuShare") / 100;
-  return n("gpuPrice") * share + n("gridPrice") * (1 - share);
+  return m("gpuPrice") * share + m("gridPrice") * (1 - share);
 }
 
 function getProtectionCost(area, days) {
-  if ($("protectionMode").value === "cycle") {
-    return n("chemCycle") + n("bioCycle") + n("entoCycle");
+  if ($("protectionMode").value === "total") {
+    return m("protectionTotalHa") * area / 10000;
   }
-  return area * days * (n("chemDaily") + n("bioDaily") + n("entoDaily"));
+  if ($("protectionMode").value === "cycle") {
+    return (m("chemCycle") + m("bioCycle") + m("entoCycle")) * area / 10000;
+  }
+  return area * days * (m("chemDaily") + m("bioDaily") + m("entoDaily"));
 }
 
 function firstHarvestOffset(periods) {
@@ -1321,11 +2953,28 @@ function firstHarvestOffset(periods) {
 }
 
 function update() {
+  $("areaM2Label").textContent = `${number(getAreaM2(), 0)} м2`;
+  $("cycleCommonWrap").classList.toggle("hidden", $("cycleTimingMode").value !== "same");
+  $("cycleSplitWrap").classList.toggle("hidden", $("cycleTimingMode").value !== "different");
+  const splitHarvest = $("harvestTimingMode").value === "different";
+  $("harvestStartBWrap").classList.toggle("hidden", !splitHarvest);
+  $("harvestStartALabel").textContent = splitHarvest ? "Старт сбора А" : "Старт сбора А и Б";
   $("gpuShareLabel").textContent = `${n("gpuShare")}%`;
   $("gpuShareWrap").classList.toggle("hidden", $("energyMode").value !== "mix");
+  $("waterRadiationWrap").classList.toggle("hidden", $("waterCalcMode").value !== "radiation");
+  $("waterManualHint").classList.toggle("hidden", $("waterCalcMode").value !== "manual");
+  $("waterLongCycleWarning").classList.toggle("hidden", !(state.crop === "tomato" && $("waterCalcMode").value === "radiation"));
+  syncWaterFromRadiation();
   $("protectionDaily").classList.toggle("hidden", $("protectionMode").value !== "daily");
   $("protectionCycle").classList.toggle("hidden", $("protectionMode").value !== "cycle");
-  $("drainBLabel").textContent = `${number(n("drainA") + n("drainDelta"), 0)}%`;
+  $("protectionTotal").classList.toggle("hidden", $("protectionMode").value !== "total");
+  $("vatNote").textContent =
+    $("vatMode").value === "gross"
+      ? `Расчет прибыли ведется без НДС. Введенные денежные значения делятся на ${number(1 + n("vatRate") / 100, 2)} для расчетной базы.`
+      : "Расчет прибыли ведется без НДС. Денежные поля ниже сейчас трактуются как цены без НДС.";
+  $("drainDeltaWrap").classList.toggle("hidden", $("drainInputMode").value === "direct");
+  $("drainDirectWrap").classList.toggle("hidden", $("drainInputMode").value !== "direct");
+  $("drainBLabel").textContent = `${number(getDrainPair().drainBPct, 0)}%`;
   $("drainModeNote").textContent =
     $("drainMode").value === "recirculated"
       ? "Обратный дренаж: экономия воды и удобрений от меньшего дренажа не включается в финансовый результат."
@@ -1338,68 +2987,128 @@ function update() {
   $("topProfit").textContent = money(result.profitDelta);
   $("profitDelta").textContent = money(result.profitDelta);
   $("breakEven").textContent = `${number(result.breakEvenKg, 2)} кг/м2`;
+  $("topBreakEven").textContent = `окупаемость: ${number(result.breakEvenKg, 2)} кг/м2`;
+  $("breakEvenFruit").textContent = `${number(result.breakEvenFruitPerM2, 1)} шт./м2`;
   $("avgPrices").textContent = `${number(result.revenue.avgPriceA, 0)} / ${number(result.revenue.avgPriceB, 0)} руб.`;
   $("earlyStart").textContent = `${number(result.earlyStart, 0)} дней`;
+  $("waterBaseLabel").textContent = `${number(result.water.baseDaily, 2)} л/м2/сут; ${number(result.water.baseTotal, 0)} л/м2 за оборот`;
+  $("waterSolutionLabel").textContent = `${number(result.water.solutionTotalA, 0)} / ${number(result.water.solutionTotalB, 0)} л/м2`;
+  $("protectionTotalLabel").textContent = money(result.costs.protection);
   $("decisionTitle").textContent = good ? "Субстрат А окупается" : "Прибавки пока недостаточно";
   $("decisionText").textContent = good
-    ? `Директор видит ${money(result.profitDelta)} дополнительной прибыли, агрономический минимум окупаемости - ${number(result.breakEvenKg, 2)} кг/м2.`
-    : `Для окупаемости нужно добрать урожайность или попасть в более дорогие периоды реализации. Текущая разница: ${money(result.profitDelta)}.`;
+    ? `По введенным данным субстрат А показывает положительный финансовый эффект относительно субстрата Б: +${money(result.profitDelta)}. Расчетная точка окупаемости разницы в стоимости субстрата - ${number(result.breakEvenKg, 2)} кг/м2, или примерно ${number(result.breakEvenFruitPerM2, 1)} плода/м2 и ${number(result.breakEvenFruitPerPlant, 2)} плода на растение.`
+    : `По введенным данным субстрат А пока не показывает положительный финансовый эффект относительно субстрата Б: ${money(result.profitDelta)}. Для окупаемости разницы в стоимости субстрата требуется не менее ${number(result.breakEvenKg, 2)} кг/м2, или примерно ${number(result.breakEvenFruitPerM2, 1)} плода/м2.`;
 
   drawWaterfall(result);
   drawPeriodChart(result);
   drawHeatmap(result);
   drawSummary(result);
+  updatePeriodTotals();
 }
 
 function drawWaterfall(result) {
-  const items = [
-    ["Доп. выручка", result.extraRevenue],
+  const revenueItems =
+    Math.abs(result.earlyStartRevenue) >= 1 && Math.abs(result.otherRevenue) >= 1
+      ? [
+          ["Выручка: более ранний старт А", result.earlyStartRevenue],
+          ["Выручка: объем/цена в общие недели", result.otherRevenue],
+        ]
+      : [["Доп. выручка", result.extraRevenue]];
+  const components = [
+    ...revenueItems,
     ["Переплата за мат", -result.substrateDelta],
     ["Экономия удобрений", result.fertSaving],
     ["Экономия воды", result.waterSaving],
     ["Доп. тара", -result.packDelta],
-    ["Итог", result.profitDelta],
-  ];
+  ]
+    .filter(([, value]) => Math.abs(value) >= 1)
+    .map(([label, value]) => [label, Math.round(value)]);
+  // "Итог" считаем как сумму уже округленных строк выше, а не как отдельно округленный
+  // profitDelta - иначе независимое округление каждой строки могло на 1-2 руб. разойтись
+  // с округленным итогом, и внимательный клиент заметил бы, что сумма строк не сходится.
+  const itogValue = components.reduce((sum, [, value]) => sum + value, 0);
+  const items = [...components, ["Итог", itogValue]];
   const max = Math.max(...items.map(([, value]) => Math.abs(value)), 1);
   $("waterfall").innerHTML = items
     .map(([label, value]) => {
-      const width = Math.max(2, Math.abs(value) / max * 100);
+      const width = Math.max(2, (Math.abs(value) / max) * 100);
       const good = value >= 0;
+      const sign = good ? "+" : "−";
       return `
         <div class="barRow">
           <div class="barLabel">${label}</div>
           <div class="barTrack"><div class="barFill ${good ? "good" : "bad"}" style="width:${width}%"></div></div>
-          <div class="barValue">${money(value)}</div>
+          <div class="barValue"><span class="barSign ${good ? "good" : "bad"}" aria-hidden="true">${sign}</span>${money(Math.abs(value))}</div>
         </div>`;
     })
-    .join("");
+    .join("") +
+    (result.drainMode === "recirculated"
+      ? `<p class="hint">При обратном дренаже экономия воды и удобрений не включена.</p>`
+      : "");
 }
 
 function drawPeriodChart(result) {
   const periods = result.revenue.periods;
   const width = 720;
-  const height = 260;
-  const pad = 28;
+  const height = 300;
+  const padLeft = 72;
+  const pad = 34;
   const maxRev = Math.max(...periods.flatMap((row) => [row.revenueA, row.revenueB]), 1);
-  const x = (i) => pad + (i / Math.max(1, periods.length - 1)) * (width - pad * 2);
-  const y = (v) => height - pad - (v / maxRev) * (height - pad * 2);
+  const yMax = niceCeil(maxRev);
+  const x = (i) => padLeft + (i / Math.max(1, periods.length - 1)) * (width - padLeft - pad);
+  const y = (v) => height - pad - (v / yMax) * (height - pad * 2);
   const line = (key) => periods.map((row, i) => `${x(i)},${y(row[key])}`).join(" ");
+  const ticks = [0, 0.25, 0.5, 0.75, 1].map((part) => yMax * part);
+  // Точка на шкале, когда накопленный доп. урожай А достигает точки окупаемости
+  // (result.breakEvenKg - та же величина, что в сводке/heatmap, отдельной оценки нет).
+  // Показывает "когда" по факту, а не только "сколько всего нужно".
+  let cumulativeYieldDelta = 0;
+  let breakEvenIndex = -1;
+  if (periods.length > 1) {
+    for (let i = 0; i < periods.length; i++) {
+      cumulativeYieldDelta += (periods[i].yieldA || 0) - (periods[i].yieldB || 0);
+      if (cumulativeYieldDelta >= result.breakEvenKg) {
+        breakEvenIndex = i;
+        break;
+      }
+    }
+  }
+  const breakEvenMarker =
+    breakEvenIndex >= 0
+      ? `<line x1="${x(breakEvenIndex)}" y1="${pad}" x2="${x(breakEvenIndex)}" y2="${height - pad}" stroke="#b98900" stroke-width="2" stroke-dasharray="4 3" />
+         <text x="${x(breakEvenIndex)}" y="${pad - 8}" text-anchor="middle" font-size="12" font-weight="700" fill="#8a6a00">окупаемость: ${periods[breakEvenIndex].label}</text>`
+      : "";
+  // Подписи осей/легенды увеличены до 12-13px и затемнены (#3a4640 вместо #66726d) -
+  // при проекции на экран/презентации мелкий серый текст (было 10-11px) читался плохо.
   $("periodChart").innerHTML = `
     <div class="lineChart">
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Выручка по периодам">
-        <line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="#cbd5ce" />
-        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${height - pad}" stroke="#cbd5ce" />
-        <polyline points="${line("revenueA")}" fill="none" stroke="#1f8a5b" stroke-width="3" />
-        <polyline points="${line("revenueB")}" fill="none" stroke="#2f6f92" stroke-width="3" />
+        <text x="16" y="${height / 2}" transform="rotate(-90 16 ${height / 2})" text-anchor="middle" font-size="13" font-weight="600" fill="#3a4640">руб. / период</text>
+        ${ticks
+          .map((tick) => {
+            const ty = y(tick);
+            return `<line x1="${padLeft}" y1="${ty}" x2="${width - pad}" y2="${ty}" stroke="#edf1ec" /><text x="${padLeft - 8}" y="${ty + 4}" text-anchor="end" font-size="12" fill="#3a4640">${compactMoney(tick)}</text>`;
+          })
+          .join("")}
+        <line x1="${padLeft}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="#cbd5ce" />
+        <line x1="${padLeft}" y1="${pad}" x2="${padLeft}" y2="${height - pad}" stroke="#cbd5ce" />
+        ${breakEvenMarker}
+        <polyline points="${line("revenueA")}" fill="none" stroke="#009933" stroke-width="3" />
+        <polyline points="${line("revenueB")}" fill="none" stroke="#0097a9" stroke-width="3" stroke-dasharray="6 4" />
         ${periods
           .filter((_, i) => i % Math.ceil(periods.length / 8) === 0)
           .map((row, i) => {
             const idx = periods.indexOf(row);
-            return `<text x="${x(idx)}" y="${height - 7}" text-anchor="middle" font-size="10" fill="#66726d">${row.label.replace("Нед. ", "")}</text>`;
+            return `<text x="${x(idx)}" y="${height - 7}" text-anchor="middle" font-size="12" fill="#3a4640">${row.label.replace("Нед. ", "")}</text>`;
           })
           .join("")}
       </svg>
-      <div class="legend"><span>Субстрат А</span><span>Субстрат Б</span></div>
+      <div class="legend"><span>Субстрат А (сплошная линия)</span><span>Субстрат Б (пунктир)</span></div>
+      ${
+        periods.length > 1 && breakEvenIndex < 0 && result.breakEvenKg > 0
+          ? `<p class="hint">Накопленный доп. урожай А не достигает точки окупаемости (${number(result.breakEvenKg, 2)} кг/м2) в пределах показанных периодов.</p>`
+          : ""
+      }
     </div>`;
 }
 
@@ -1408,7 +3117,13 @@ function drawHeatmap(result) {
   const prices = state.crop === "cucumber" ? [50, 80, 110, 130, 150, 200, 270] : [60, 80, 95, 110, 130, 160, 200];
   const baseYield = result.revenue.yieldB;
   const area = result.area;
-  const cleanExtraCost = result.substrateDelta - result.waterSaving - result.fertSaving;
+  const cleanExtraCost = result.cleanExtraCost;
+  const offA = n("offgradeA") / 100;
+  // Прибавка урожая продается не вся по полной цене: часть уйдет в нестандарт (ставка
+  // offgradeA, тот же процент, что и у остального урожая А) по цене ~85% от
+  // стандартной (конвенция приложения для автозаполнения таблицы периодов), и с каждого
+  // доп. кг нужно оплатить тару. effectivePrice учитывает оба эффекта.
+  const effectivePrice = (price) => Math.max(0, price * (1 - 0.15 * offA) - result.packCostPerKg);
   const html = `
     <table>
       <thead><tr><th>Прибавка / Цена</th>${prices.map((p) => `<th>${p} руб.</th>`).join("")}</tr></thead>
@@ -1417,10 +3132,13 @@ function drawHeatmap(result) {
           .map((delta) => {
             const cells = prices
               .map((price) => {
-                const value = delta * area * price - cleanExtraCost;
+                const value = delta * area * effectivePrice(price) - cleanExtraCost;
                 const opacity = Math.min(1, Math.abs(value) / Math.max(1, cleanExtraCost * 3));
-                const bg = value >= 0 ? `rgba(31,138,91,${0.14 + opacity * 0.52})` : `rgba(186,63,58,${0.12 + opacity * 0.5})`;
-                return `<td class="heatCell" style="background:${bg}">${money(value)}</td>`;
+                const good = value >= 0;
+                const bg = good ? `rgba(0,153,51,${0.14 + opacity * 0.52})` : `rgba(186,63,58,${0.12 + opacity * 0.5})`;
+                // Значок (не только цвет фона) отмечает окупаемость - иначе зависящим от
+                // одного лишь цвета дальтоникам (~8% мужчин) сложно читать таблицу.
+                return `<td class="heatCell" style="background:${bg}"><span class="heatMark" aria-hidden="true">${good ? "✓" : "✗"}</span>${money(value)}</td>`;
               })
               .join("");
             return `<tr><th>+${number(delta, 1)} кг/м2</th>${cells}</tr>`;
@@ -1428,48 +3146,85 @@ function drawHeatmap(result) {
           .join("")}
       </tbody>
     </table>
-    <p class="hint">База Б: ${number(baseYield, 1)} кг/м2. Матрица изолирует эффект доп. урожая, цены, переплаты за мат и экономии воды/удобрений.</p>`;
+    <p class="hint">Зеленые ячейки - субстрат А окупается. Красные - прибавки урожая недостаточно. База Б: ${number(baseYield, 1)} кг/м2. Цена в шапке столбца - цена стандарта; расчет уже учитывает долю нестандарта (${number(n("offgradeA"), 1)}%) и тару на доп. урожай.</p>`;
   $("heatmap").innerHTML = html;
 }
 
 function drawSummary(result) {
-  const rows = [
-    ["Выручка А", money(result.revenue.revenueA)],
-    ["Выручка Б", money(result.revenue.revenueB)],
-    ["Урожайность А", `${number(result.revenue.yieldA, 2)} кг/м2`],
-    ["Урожайность Б", `${number(result.revenue.yieldB, 2)} кг/м2`],
-    ["Средневзвешенная цена А", `${number(result.revenue.avgPriceA, 1)} руб./кг`],
-    ["Средневзвешенная цена Б", `${number(result.revenue.avgPriceB, 1)} руб./кг`],
-    ["Цена стандарта А / Б", `${number(result.revenue.avgStandardPriceA, 1)} / ${number(result.revenue.avgStandardPriceB, 1)} руб./кг`],
-    ["Цена нестандарта А / Б", `${number(result.revenue.avgOffgradePriceA, 1)} / ${number(result.revenue.avgOffgradePriceB, 1)} руб./кг`],
-    ["Цена электроэнергии в расчете", `${number(result.energyPrice, 2)} руб./кВтч`],
-    ["Дренаж А / Б", `${number(n("drainA"), 0)}% / ${number(n("drainA") + n("drainDelta"), 0)}%`],
-    ["Тип дренажа", result.drainMode === "recirculated" ? "Обратный дренаж, экономия не учтена" : "Открытый дренаж, экономия учтена"],
-    ["Экономия удобрений", money(result.fertSaving)],
-    ["Экономия воды", money(result.waterSaving)],
-    ["Потенциал экономии удобрений по дренажу", money(result.costs.potentialFertSaving)],
-    ["Потенциал экономии воды по дренажу", money(result.costs.potentialWaterSaving)],
-    ["Электроэнергия", money(result.costs.energy)],
-    ["Газ / тепло", money(result.costs.gas)],
-    ["Защита растений", money(result.costs.protection)],
-    ["Труд", money(result.costs.labor)],
-    ["Семена", money(result.costs.seeds)],
-    ["Итого затраты А", money(result.costs.costA)],
-    ["Итого затраты Б", money(result.costs.costB)],
-    ["Прибыль А", money(result.profitA)],
-    ["Прибыль Б", money(result.profitB)],
-    ["Доп. прибыль А против Б", money(result.profitDelta)],
+  const financialRows = [
+    ["Выручка от реализации", result.revenue.revenueA, result.revenue.revenueB],
+    ["Субстрат", result.costs.substrateA, result.costs.substrateB],
+    ["Вода", result.costs.waterA, result.costs.waterB],
+    ["Удобрения / рабочий раствор", result.costs.fertA, result.costs.fertB],
+    ["Электроэнергия", result.costs.energy, result.costs.energy],
+    ["Газ / тепло", result.costs.gas, result.costs.gas],
+    ["Защита растений", result.costs.protection, result.costs.protection],
+    ["Труд", result.costs.labor, result.costs.labor],
+    ["Семена", result.costs.seeds, result.costs.seeds],
+    ["Тара", result.costs.packA, result.costs.packB],
+    ["Итого затраты", result.costs.costA, result.costs.costB],
+    ["Финансовый результат", result.profitA, result.profitB],
+    ["Дополнительный финансовый эффект А", result.profitDelta, 0],
+  ];
+  const assumptionRows = [
+    ["Урожайность", `${number(result.revenue.yieldA, 2)} кг/м2`, `${number(result.revenue.yieldB, 2)} кг/м2`, `${number(result.revenue.yieldA - result.revenue.yieldB, 2)} кг/м2`],
+    ["Средневзвешенная цена реализации", `${number(result.revenue.avgPriceA, 1)} руб./кг`, `${number(result.revenue.avgPriceB, 1)} руб./кг`, `${number(result.revenue.avgPriceA - result.revenue.avgPriceB, 1)} руб./кг`],
+    ["Цена стандарта", `${number(result.revenue.avgStandardPriceA, 1)} руб./кг`, `${number(result.revenue.avgStandardPriceB, 1)} руб./кг`, `${number(result.revenue.avgStandardPriceA - result.revenue.avgStandardPriceB, 1)} руб./кг`],
+    ["Цена нестандарта", `${number(result.revenue.avgOffgradePriceA, 1)} руб./кг`, `${number(result.revenue.avgOffgradePriceB, 1)} руб./кг`, `${number(result.revenue.avgOffgradePriceA - result.revenue.avgOffgradePriceB, 1)} руб./кг`],
+    ["Нестандарт", `${number(n("offgradeA"), 1)}%`, `${number(n("offgradeB"), 1)}%`, `${number(n("offgradeA") - n("offgradeB"), 1)} п.п.`],
+    ["Масса плода", `${number(n("fruitWeightG"), 0)} г`, `${number(n("fruitWeightG"), 0)} г`, "используется для окупаемости в плодах"],
+    ["Окупаемость в плодах", `${number(result.breakEvenFruitPerM2, 1)} шт./м2`, `${number(result.breakEvenFruitPerPlant, 2)} шт./растение`, `${number(result.breakEvenKg, 2)} кг/м2`],
+    ["Дренаж", `${number(getDrainPair().drainAPct, 0)}%`, `${number(getDrainPair().drainBPct, 0)}%`, `${number(-getDrainPair().deltaPct, 0)} п.п.`],
+    ["Оборот", `${formatDisplayDate(getCycleStartA())} - ${formatDisplayDate(parseDate($("cycleTimingMode").value === "different" ? $("cycleEndA").value : $("cycleEnd").value))}`, `${formatDisplayDate(getCycleStartB())} - ${formatDisplayDate(parseDate($("cycleTimingMode").value === "different" ? $("cycleEndB").value : $("cycleEnd").value))}`, `${number(result.days, 0)} дней`],
+    ["Площадь", `${number(result.area / 10000, 2)} га`, `${number(result.area / 10000, 2)} га`, `${number(result.area, 0)} м2`],
+    ["Цена электроэнергии в расчете", `${number(result.energyPrice, 2)} руб./кВтч`, `${number(result.energyPrice, 2)} руб./кВтч`, "0"],
+    ["Защита растений", money(result.costs.protection), money(result.costs.protection), protectionModeLabel()],
+    ["Тип дренажа", result.drainMode === "recirculated" ? "Обратный" : "Открытый", result.drainMode === "recirculated" ? "Обратный" : "Открытый", result.drainMode === "recirculated" ? "экономия воды/удобрений не включена" : "экономия учтена"],
   ];
   $("summaryTable").innerHTML = `
-    <table>
-      <thead><tr><th>Показатель</th><th>Значение</th></tr></thead>
-      <tbody>${rows.map(([label, value]) => `<tr><td>${label}</td><td><strong>${value}</strong></td></tr>`).join("")}</tbody>
+    <h3>Итог расчета за оборот, руб. без НДС</h3>
+    <table class="summaryTable__main">
+      <thead><tr><th>Показатель</th><th>Субстрат А</th><th>Субстрат Б</th><th>Дельта А-Б</th></tr></thead>
+      <tbody>${financialRows
+        .map(([label, a, b]) => {
+          const delta = label === "Дополнительный финансовый эффект А" ? a : a - b;
+          return `<tr><td>${label}</td><td><strong>${money(a)}</strong></td><td><strong>${label === "Дополнительный финансовый эффект А" ? "-" : money(b)}</strong></td><td><strong>${money(delta)}</strong></td></tr>`;
+        })
+        .join("")}</tbody>
+    </table>
+    <h3>Показатели, использованные в расчете</h3>
+    <table class="summaryTable__assumptions">
+      <thead><tr><th>Показатель</th><th>Субстрат А</th><th>Субстрат Б</th><th>Разница / примечание</th></tr></thead>
+      <tbody>${assumptionRows.map(([label, a, b, delta]) => `<tr><td>${label}</td><td><strong>${a}</strong></td><td><strong>${b}</strong></td><td><strong>${delta}</strong></td></tr>`).join("")}</tbody>
     </table>`;
 }
 
 function round(value, digits) {
   const factor = 10 ** digits;
   return Math.round((Number(value) + Number.EPSILON) * factor) / factor;
+}
+
+function cleanZero(value, digits = 0) {
+  const numeric = Number(value) || 0;
+  const threshold = 0.5 * 10 ** -digits;
+  return Math.abs(numeric) < threshold ? 0 : numeric;
+}
+
+function protectionModeLabel() {
+  if ($("protectionMode").value === "total") return "ручная сумма за оборот на 1 га";
+  if ($("protectionMode").value === "cycle") return "сумма блоков за оборот на 1 га";
+  return "ставки руб./м2/день";
+}
+
+function niceCeil(value) {
+  const pow = 10 ** Math.floor(Math.log10(Math.max(1, value)));
+  return Math.ceil(value / pow) * pow;
+}
+
+function compactMoney(value) {
+  if (value >= 1000000) return `${number(value / 1000000, 1)} млн`;
+  if (value >= 1000) return `${number(value / 1000, 0)} тыс`;
+  return number(value, 0);
 }
 
 function parseDate(value) {
@@ -1488,11 +3243,21 @@ function formatShortDate(date) {
   return date.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" });
 }
 
+function formatDisplayDate(date) {
+  return date ? date.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" }) : "-";
+}
+
+function formatDateInput(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function monthLabel(date) {
   return date.toLocaleDateString("ru-RU", { month: "short" }).replace(".", "");
 }
 
 setup();
 </script>
-  </body>
-</html>
+</body></html>
